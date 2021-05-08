@@ -19,6 +19,6 @@ from django.urls import path
 from WifiMonitor import views
 
 urlpatterns = [
-    path('***REMOVED***/', ***REMOVED***.site.urls),
     path('index/', views.index, name='index'),
+    path('map/', views.map ,name='map'),
 ]
