@@ -20,12 +20,11 @@
           var ctx = $myGraph[0].getContext("2d");
 
           new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
               labels: data.labels,
               datasets: [{
                 label: 'Population',
-                fill: 'false',
                 backgroundColor: 'blue',
                 data: data.data
               }]
