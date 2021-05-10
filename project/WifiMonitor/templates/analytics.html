@@ -4,59 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Map - Mazer Admin Dashboard</title>
+    <title>***REMOVED***</title>
+    <link rel="shortcut icon" href="/static/images/logo/logoTitle.png" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
-
     <link rel="stylesheet" href="/static/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="/static/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/app.css">
-    <link rel="shortcut icon" href="/static/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 </head>
 
 <body>
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
-                <div class="sidebar-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="logo">
-                            <a href="/index"><img src="/static/images/logo/logo.png" alt="Logo" srcset=""></a>
-                        </div>
-                        <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                        </div>
+                <div class="sidebar-head">
+                    <div class="col-md-4 col-sm-4">
+                        <a href="/index">
+                            <img class="img-header" src="/static/images/logo/Logo.png" width="198%" height="100%">
+                        </a>
                     </div>
                 </div>
-                <div class="sidebar-menu">
+
+                <div class="sidebar-menu sidebar-text">
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
-
-                        <li class="sidebar-item  ">
+                        <li class="sidebar-item">
                             <a href="/index" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
+                                <i class="fas fa-map-marked-alt" style="color: white"></i>
+                                <span>Heatmap</span>
                             </a>
                         </li>
 
-                       
-                    <li class="sidebar-item active ">
-                         <a href="/map" class='sidebar-link'>
-                            <i class="bi bi-grid-fill"></i>
-                        <span>Map</span>
-                        </a>
-                    </li>
-                       
+                        <li class="sidebar-item">
+                            <a href="" class='sidebar-link'>
+                                <i class="fas fa-history" style="color: white"></i>
+                                <span>Timelapse</span>
+                            </a>
+                        </li>
 
+                        <li class="sidebar-item active">
+                            <a href="/analytics" class='sidebar-link'>
+                                <i class="fas fa-chart-area" style="color: white"></i>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
+
         </div>
-        <div id="main">
+        <div id="main" style="background: #f1f1f1">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
                     <i class="bi bi-justify fs-3"></i>
@@ -67,16 +68,8 @@
                 <div class="page-title">
                     <div class="row">
                         <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Google Map</h3>
+                            <h3>Analytics</h3>
                             <p class="text-subtitle text-muted">An application for user </p>
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Google Map</li>
-                                </ol>
-                            </nav>
                         </div>
                     </div>
                 </div>
@@ -97,23 +90,24 @@
                 </section>
             </div>
 
+            <hr>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
+                    <div class="top-pad">
                     <div class="float-start">
-                        <p>2021 &copy; Mazer</p>
+                        <p>2021 &copy; WiFi Monitor</p>
                     </div>
                     <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                href="http://ahmadsaugi.com">A. Saugi</a></p>
+                        <p>Projeto em Engenharia Informática - Grupo 05 - MIECT</p>
+                    </div>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
+
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
-
     <script src="/static/js/main.js"></script>
 </body>
-
 </html>

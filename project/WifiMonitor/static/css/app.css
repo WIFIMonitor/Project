@@ -964,6 +964,8 @@
 	font-size: 1rem;
 	list-style: none;
 	font-weight: 600;
+	color: white;
+	font-weight: bold
 }
 
 .sidebar-wrapper .menu .sidebar-link {
@@ -975,7 +977,16 @@
 	border-radius: .5rem;
 	transition: all .5s;
 	text-decoration: none;
-	color: #25396f
+	color: white;
+}
+
+.sidebar-wrapper .sidebar-head .img-header {
+	padding-left: 32px;
+	padding-top: 25px
+}
+
+.active .sidebar-wrapper {
+	background: #535151;
 }
 
 .sidebar-wrapper .menu .sidebar-link i,
@@ -988,7 +999,7 @@
 }
 
 .sidebar-wrapper .menu .sidebar-link:hover {
-	background-color: #f0f1f5
+	background-color: #b1b1b3
 }
 
 .sidebar-wrapper .menu .sidebar-item {
@@ -1007,7 +1018,7 @@
 }
 
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
-	background-color: #435ebe
+	background-color: #6f6f72
 }
 
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link span {
@@ -1053,6 +1064,10 @@
 	font-weight: 600;
 	letter-spacing: .5px;
 	transition: all .3s
+}
+
+.top-pad {
+	padding-top: 20px;
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item a:hover {
