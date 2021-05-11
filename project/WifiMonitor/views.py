@@ -36,10 +36,17 @@ def myGraph(request):
 
 
 def get_buildings_count():
-    building = client.query("show tag values from clientsCount with key = building")
+    res = client.query("select \"building\",\"clientsCount\" from clientsCount").raw['series'][0]["values"]
+    
 
-    print(building[2])
 
 
+def get_building_names():
+    res = client.query("show tag values from clientsCount with key = building").raw["series"][0]["values"]
+    buildings = []
+    for x in res:
+        buildings.append(x[1])
+
+    return buildings
 
 get_buildings_count()
