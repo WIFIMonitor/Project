@@ -10,6 +10,9 @@ def index(request):
 def analytics(request):
     return render(request, 'analytics.html')
 
+def timelapse(request):
+    return render(request, 'timelapse.html')
+
 def test(request):
     return render(request, 'bar_graphic.html')
 

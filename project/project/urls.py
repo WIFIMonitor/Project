@@ -21,5 +21,6 @@ from WifiMonitor import views
 urlpatterns = [
     path('index/', views.index, name='index'),
     path('myGraph/', views.myGraph, name='myGraph'),
-    path('analytics/', views.analytics, name='analytics')
+    path('analytics/', views.analytics, name='analytics'),
+    path('timelapse/', views.timelapse, name='timelapse')
 ]
