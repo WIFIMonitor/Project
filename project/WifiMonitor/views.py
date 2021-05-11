@@ -1,5 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from influxdb import InfluxDBClient
+
+client = InfluxDBClient("localhost", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 
 def index(request):
     return render(request, 'index.html')
@@ -27,3 +30,13 @@ def myGraph(request):
         'labels': labels,
         'data': data,
     })
+
+
+def get_buildings_count():
+    building = client.query("show tag values from clientsCount with key = building")
+
+    print(building[2])
+
+
+
+get_buildings_count()
