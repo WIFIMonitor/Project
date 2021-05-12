@@ -8,7 +8,16 @@ def heatmap(request):
     return render(request, 'heatmap.html')
 
 def analytics(request):
-    return render(request, 'analytics.html')
+
+    try:
+        people_count = client.query("select sum(clientsCount) from clientsCount where time >= now()-15m ").raw['series'][0]["values"][0][1]
+    except:
+        people_count = "null"
+
+    tparams = {
+        'people_count' : people_count
+    }
+    return render(request, 'analytics.html', tparams)
 
 def timelapse(request):
     return render(request, 'timelapse.html')
