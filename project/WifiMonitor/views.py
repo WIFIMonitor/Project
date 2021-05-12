@@ -4,8 +4,8 @@ from influxdb import InfluxDBClient
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 
-def index(request):
-    return render(request, 'index.html')
+def heatmap(request):
+    return render(request, 'heatmap.html')
 
 def analytics(request):
     return render(request, 'analytics.html')
