@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
 
-client = InfluxDBClient("localhost", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 
 def index(request):
     return render(request, 'index.html')
@@ -34,24 +34,24 @@ def population_building_graph(request):
 
 
 def get_buildings_count():
-    try:
-        #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
-        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()+45m ").raw['series'][0]["values"]
-        #print(res)
-        count = {}
 
-        #count(chave=edificio, value=n de pessoas no edificio)
-        for sample in res:
-            building = sample[1]
-            if building not in count:
-                count[building] = int(sample[2])
-            else:
-                count[building] = count[building] + int(sample[2])
+    #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
+    res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()+15m ").raw['series'][0]["values"]
+    #print(res)
+    count = {}
+
+    #count(chave=edificio, value=n de pessoas no edificio)
+    for sample in res:
+        building = sample[1]
+        if building not in count:
+            count[building] = int(sample[2])
+        else:
+            count[building] = count[building] + int(sample[2])
 
 
-    except:
-        print('ERROR: getting data from DB')
-        count = {}
+
+    print('ERROR: getting data from DB')
+    count = {}
     return count
 
 
@@ -69,3 +69,4 @@ def get_building_names():
 
     return buildings
 
+#get_building_names()
