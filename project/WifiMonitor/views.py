@@ -16,18 +16,16 @@ def timelapse(request):
 def test(request):
     return render(request, 'bar_graphic.html')
 
-def population_chart(request):
-    labels = ['DETI', 'ESSUA', 'CANTINA', 'BIBLIOTECA']
-    data = [100,110,560,900]
 
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
 
-def myGraph(request):
-    labels = ['DETI', 'ESSUA', 'CANTINA', 'BIBLIOTECA']
-    data = [100, 110, 560, 900]
+
+
+
+
+def population_building_graph(request):
+    count = get_buildings_count()
+    labels = list(count.keys())
+    data = list(count.values())
 
     return JsonResponse(data={
         'labels': labels,
@@ -36,8 +34,30 @@ def myGraph(request):
 
 
 def get_buildings_count():
-    res = client.query("select \"building\",\"clientsCount\" from clientsCount").raw['series'][0]["values"]
-    
+    try:
+        #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
+        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()+45m ").raw['series'][0]["values"]
+        #print(res)
+        count = {}
+
+        #count(chave=edificio, value=n de pessoas no edificio)
+        for sample in res:
+            building = sample[1]
+            if building not in count:
+                count[building] = int(sample[2])
+            else:
+                count[building] = count[building] + int(sample[2])
+
+
+    except:
+        print('ERROR: getting data from DB')
+        count = {}
+    return count
+
+
+
+
+
 
 
 
@@ -49,4 +69,3 @@ def get_building_names():
 
     return buildings
 
-get_buildings_count()

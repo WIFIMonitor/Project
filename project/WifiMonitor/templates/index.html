@@ -149,7 +149,7 @@
                                         <h4>Profile Visit</h4>
                                     </div>
                                     <div class="card-body">
-                                        <canvas id="myGraph" data-url="{% url 'myGraph' %}"></canvas>
+                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +196,7 @@
     <script>
      $(function () {
 
-      var $myGraph = $("#myGraph");
+      var $myGraph = $("#population_building_graph");
       $.ajax({
         url: $myGraph.data("url"),
         success: function (data) {
