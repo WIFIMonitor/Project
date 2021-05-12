@@ -1074,7 +1074,9 @@
 .calendar {
 	width: 300px;
 	height: 310px;
-	background-color: #f5eded;
+	margin-top: 25px;
+	background-color: #f3f3f3;
+	box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.16);
 }
 
 .month {
@@ -1087,6 +1089,7 @@
 	padding: 0 2rem;
 	text-align: center;
 	color: white;
+	padding-top: 18px;
 }
 
 .month i {
@@ -1101,8 +1104,16 @@
 	color: white;
 }
 
-.prev-date, .next-date {
-	opacity: 0.3;
+.weekdays {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding-top: 6px;
+	padding-bottom: 8px;
+}
+
+.weekdays div {
+	width: calc(300px/7);
 }
 
 .today {
@@ -1110,9 +1121,28 @@
 	color: white;
 }
 
+.days {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.days div {
+	width: calc(300px/7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 2rem;
+	transition: background-color 0.2s;
+}
+
+.prev-date, .next-date {
+	opacity: 0.3;
+}
+
 .days div:hover:not(.today) {
 	background-color: #d4d2d2;
-	border: 0.2rem solid #777;
+	border: 0.1rem solid #777;
 	cursor: pointer;
 }
 

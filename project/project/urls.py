@@ -19,7 +19,7 @@ from django.urls import path
 from WifiMonitor import views
 
 urlpatterns = [
-    path('index/', views.index, name='index'),
+    path('', views.index, name='index'),
     path('population_building_graph/', views.population_building_graph, name='population_building_graph'),
     path('analytics/', views.analytics, name='analytics'),
     path('timelapse/', views.timelapse, name='timelapse')
