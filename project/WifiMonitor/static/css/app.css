@@ -1074,20 +1074,18 @@
 .calendar {
 	width: 300px;
 	height: 310px;
-	background-color: #cecccc;
-	box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.2);
+	background-color: #f5eded;
 }
 
 .month {
 	width: 100%;
 	height: 80px;
-	background-color: #25396f;
+	background-color: #0dcaf0;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 2rem;
 	text-align: center;
-	padding-top: 18px;
 	color: white;
 }
 
@@ -1103,8 +1101,19 @@
 	color: white;
 }
 
-.month p {
-	font-size: 1.6rem;
+.prev-date, .next-date {
+	opacity: 0.3;
+}
+
+.today {
+	background-color: #0dcaf0;
+	color: white;
+}
+
+.days div:hover:not(.today) {
+	background-color: #d4d2d2;
+	border: 0.2rem solid #777;
+	cursor: pointer;
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item a:hover {

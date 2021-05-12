@@ -16,12 +16,6 @@ def timelapse(request):
 def test(request):
     return render(request, 'bar_graphic.html')
 
-
-
-
-
-
-
 def population_building_graph(request):
     count = get_buildings_count()
     labels = list(count.keys())
