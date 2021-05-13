@@ -1,5 +1,5 @@
 {% block content %}
-
+ {% load static %}
   <div id="container" style="width: 75%;">
 
     <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
@@ -8,8 +8,10 @@
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+
+
+    <script>
      $(function () {
 
       var $myGraph = $("#myGraph");
@@ -25,25 +27,29 @@
               labels: data.labels,
               datasets: [{
                 label: 'Population',
-                backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+                borderColor: 'red',
                 data: data.data
               }]
             },
-            options: {
-              responsive: true,
-              legend: {
-                position: 'top',
-              },
-                interaction: {
-                mode: 'index',
-                intersect: false,
-                },
-                stacked: false,
-              title: {
-                display: true,
-                text: 'Population through the day'
+
+
+              options: {
+                  responsive: true,
+                  interaction: {
+                      mode: 'index',
+                      intersect: false,
+                  },
+                  stacked: false,
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: 'building'
+                      }
+                  },
               }
-            }
+
+
+
           });
 
         }

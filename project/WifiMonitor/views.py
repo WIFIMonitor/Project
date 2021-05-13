@@ -41,14 +41,8 @@ def population_building_graph(request):
         'labels': labels,
         'data': data,
     })
-def line_graph(request):
-    labels = [0,1,2,3,4,5,6,7,8,9]
-    data = [100,110,100,230,160,130,70,300,200,100]
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
+def specific_building(request):
+    return render(request, 'specific_building.html')
 def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
