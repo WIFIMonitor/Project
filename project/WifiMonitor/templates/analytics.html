@@ -83,7 +83,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Profile Views</h6>
+                                                <h6 class="text-muted font-semibold">Total People in UA network</h6>
                                                 <h6 class="font-extrabold mb-0">{{ people_count }}</h6>
                                             </div>
                                         </div>
@@ -100,8 +100,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Followers</h6>
-                                                <h6 class="font-extrabold mb-0">183.000</h6>
+                                                <h6 class="text-muted font-semibold">People in Campus</h6>
+                                                <h6 class="font-extrabold mb-0">{{ campus_people_count }}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -117,8 +117,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Following</h6>
-                                                <h6 class="font-extrabold mb-0">80.000</h6>
+                                                <h6 class="text-muted font-semibold">People in Residentials</h6>
+                                                <h6 class="font-extrabold mb-0">{{ residentials_people_count }}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Profile Visit</h4>
+                                        <h4>Distribution through buildings</h4>
                                     </div>
                                     <div class="card-body">
                                         <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>

@@ -9,13 +9,20 @@ def heatmap(request):
 
 def analytics(request):
 
+
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >= now()-15m ").raw['series'][0]["values"][0][1]
+        residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=now()-15m").raw['series'][0]["values"][0][1]
+        campus_people_count = people_count - residentials_people_count
     except:
         people_count = "null"
+        residentials_people_count = "null"
+        campus_people_count = "null"
 
     tparams = {
-        'people_count' : people_count
+        'people_count' : people_count,
+        'residentials_people_count' : residentials_people_count,
+        'campus_people_count' : campus_people_count
     }
     return render(request, 'analytics.html', tparams)
 
@@ -46,6 +53,8 @@ def get_buildings_count():
         #count(chave=edificio, value=n de pessoas no edificio)
         for sample in res:
             building = sample[1]
+            if building == 'ra':
+                continue
             if building not in count:
                 count[building] = int(sample[2])
             else:
