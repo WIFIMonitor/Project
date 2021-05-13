@@ -1,4 +1,4 @@
-const date = new Date();
+const date_b = new Date();
 
 const renderCalendar = () => {
     date.setDate(1);
