@@ -1077,6 +1077,7 @@
 	margin-top: 25px;
 	background-color: #f3f3f3;
 	box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.16);
+	margin-bottom: 15px;
 }
 
 .month {
@@ -1127,7 +1128,22 @@
 	flex-wrap: wrap;
 }
 
+.days-b {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
 .days div {
+	width: calc(300px/7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 2rem;
+	transition: background-color 0.2s;
+}
+
+.days-b div {
 	width: calc(300px/7);
 	display: flex;
 	justify-content: center;
@@ -1144,6 +1160,18 @@
 	background-color: #d4d2d2;
 	border: 0.1rem solid #777;
 	cursor: pointer;
+}
+
+.days-b div:hover:not(.today) {
+	background-color: #d4d2d2;
+	border: 0.1rem solid #777;
+	cursor: pointer;
+}
+
+.generate-button {
+	vertical-align: 35px;
+	background-color: #0dcaf0;
+	border-color: #0dcaf0;
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item a:hover {
