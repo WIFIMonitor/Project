@@ -42,7 +42,6 @@ def population_building_graph(request):
         'data': data,
     })
 
-
 def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
@@ -64,13 +63,6 @@ def get_buildings_count():
         count = {}
 
     return count
-
-
-
-
-
-
-
 
 def get_building_names():
     res = client.query("show tag values from clientsCount with key = building").raw["series"][0]["values"]
