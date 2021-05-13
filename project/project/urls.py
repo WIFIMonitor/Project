@@ -23,7 +23,7 @@ urlpatterns = [
     path('population_building_graph/', views.population_building_graph, name='population_building_graph'),
     path('analytics/', views.analytics, name='analytics'),
     path('timelapse/', views.timelapse, name='timelapse'),
-    path('test',views.test, name='test'),
+    path('test/',views.test, name='test'),
     path('line_graph', views.line_graph, name='line_graph')
 
 ]

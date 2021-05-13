@@ -25,7 +25,7 @@
               labels: data.labels,
               datasets: [{
                 label: 'Population',
-                backgroundColor: 'blue',
+                backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
                 data: data.data
               }]
             },
@@ -34,9 +34,14 @@
               legend: {
                 position: 'top',
               },
+                interaction: {
+                mode: 'index',
+                intersect: false,
+                },
+                stacked: false,
               title: {
                 display: true,
-                text: 'Population Bar Chart'
+                text: 'Population through the day'
               }
             }
           });
