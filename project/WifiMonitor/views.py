@@ -30,7 +30,7 @@ def timelapse(request):
     return render(request, 'timelapse.html')
 
 def test(request):
-    return render(request, 'bar_graphic.html')
+    return render(request, 'line_graphic.html')
 
 def population_building_graph(request):
     count = get_buildings_count()
