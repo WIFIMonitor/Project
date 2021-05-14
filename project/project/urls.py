@@ -24,6 +24,7 @@ urlpatterns = [
     path('analytics/', views.analytics, name='analytics'),
     path('timelapse/', views.timelapse, name='timelapse'),
     path('test/',views.test, name='test'),
-    path('specific_building/', views.specific_building, name='specific_building')
+    path('specific_building/', views.specific_building, name='specific_building'),
+    path('line_graph/', views.line_graph, name='line_graph'),
 
 ]

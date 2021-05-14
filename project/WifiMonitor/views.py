@@ -45,7 +45,7 @@ def population_building_graph(request):
 def specific_building(request):
     global prev_id
     buildings = dict(enumerate(get_building_names()))
-    print(buildings)
+    #print(buildings)
     if request.method == "GET":  # carregar a pag
         id = 0
         building_name = "Choose your building"
@@ -66,6 +66,17 @@ def specific_building(request):
 
 
     return render(request, 'specific_building.html')
+
+def line_graph(request):
+    labels = [0,10,20,30,40,50,60]
+    data = [100,130,80,90,100,100,170]
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
 def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc

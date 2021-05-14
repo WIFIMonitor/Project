@@ -38,14 +38,14 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item active">
+                        <li class="sidebar-item">
                             <a href="/timelapse" class='sidebar-link'>
                                 <i class="fas fa-history" style="color: white"></i>
                                 <span>Timelapse</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item has-sub">
+                        <li class="sidebar-item active has-sub ">
                             <a href="#" class='sidebar-link'>
                                 <i class="fas fa-chart-area" style="color: white"></i>
                                 <span>Analytics</span>
@@ -107,7 +107,7 @@
                                                                     <input id ="submitIn" type="hidden" name="myinput" value="0" />
                                                                 </form>
                                                             </div>
-
+                                                            <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
                                                             <script>
                                                                 function submit(){ // trigger action
                                                                     document.getElementById("submitIn").value = "1";
