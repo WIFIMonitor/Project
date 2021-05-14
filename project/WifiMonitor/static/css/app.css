@@ -1120,6 +1120,7 @@
 .today {
 	background-color: #0dcaf0;
 	color: white;
+	border-radius: 80px;
 }
 
 .days {
@@ -1160,6 +1161,13 @@
 	background-color: #d4d2d2;
 	border: 0.1rem solid #777;
 	cursor: pointer;
+}
+
+.active-days {
+	background-color: #25396f;
+	border: 0.1rem solid #25396f;
+	color: white;
+	border-radius: 80px;
 }
 
 .days-b div:hover:not(.today) {

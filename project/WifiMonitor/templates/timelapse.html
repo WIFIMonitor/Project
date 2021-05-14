@@ -45,25 +45,11 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item has-sub">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item">
+                            <a href="/analytics" class='sidebar-link'>
                                 <i class="fas fa-chart-area" style="color: white"></i>
                                 <span>Analytics</span>
                             </a>
-                             <ul class="submenu">
-                                <li class="submenu-item ">
-                                    <a href="/analytics" style="color: white">Overview</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="/specific_building" style="color: white">Specific building</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href=""style="color: white">to implement</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href=""style="color: white">to implement</a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -79,9 +65,6 @@
 
             <div class="page-heading">
                 <h3>Timelapse</h3>
-            </div>
-            <div>
-                <input align="center" name="selData" id="date" type="date"/>
             </div>
 
             <div class="page-content">
@@ -186,12 +169,137 @@
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/main.js"></script>
-    <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">
+        todaysMonthNumber = new Date().getMonth()
 
-    <script src="assets/vendors/apexcharts/apexcharts.js"></script>
-    <script src="assets/js/pages/dashboard.js"></script>
+        var countPrev = 0
+        document.querySelector('.prev').addEventListener('click', () => {
+            countPrev++
+        });
 
+        var countNext = 0
+        document.querySelector('.next').addEventListener('click', () => {
+            countNext++
+        });
+
+        $(document).on('click', '.days div', function(){
+            $(this).addClass('active-days').siblings().removeClass('active-days')
+
+            var months = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December']
+
+            // Print the complete date
+            var day = this.textContent
+            var monthName = document.querySelector('.date h5').textContent
+            var monthNumber = months.indexOf(monthName) + 1
+            var year = new Date().getFullYear().toString().slice()
+
+            // verifica se o dia selecionado é do mês anterior
+            if(this.classList.contains("prev-date")){
+                if(monthName == "January"){
+                    monthNumber = 12
+                    year = year - 1
+                }else{
+                    monthNumber = monthNumber - 1
+                }
+            }
+            // verifica se o dia selecionado é do mês seguinte
+            if(this.classList.contains("next-date")){
+                if(monthName == "December"){
+                    monthNumber = 1
+                    year = parseInt(year) + 1
+                }else{
+                    monthNumber = monthNumber + 1
+                }
+            }
+
+            var newYear = parseInt(year)
+            if(todaysMonthNumber - countPrev < 0){
+                var tmp = Math.ceil((countPrev - todaysMonthNumber) / 12)
+                newYear = newYear - tmp
+                var dateSelected = months[monthNumber-1] +" "+ day +" "+ newYear
+                document.querySelector('.date p').innerHTML = dateSelected;
+            }
+            else if(todaysMonthNumber + countNext > 11){
+                var tmp = Math.ceil((countNext - todaysMonthNumber) / 12)
+                newYear = newYear + tmp
+                var dateSelected = months[monthNumber-1] +" "+ day +" "+ newYear
+                document.querySelector('.date p').innerHTML = dateSelected;
+            }
+            else{
+                var dateSelected = months[monthNumber-1] +" "+ day +" "+ year
+                //console.log(dateSelected)
+                document.querySelector('.date p').innerHTML = dateSelected;
+            }
+        })
+    </script>
+
+    <script type="text/javascript">
+        todaysMonthNumber_b = new Date().getMonth()
+
+        var countPrev_b = 0
+        document.querySelector('.prev-b').addEventListener('click', () => {
+            countPrev_b++
+        });
+
+        var countNext_b = 0
+        document.querySelector('.next-b').addEventListener('click', () => {
+            countNext_b++
+        });
+
+        $(document).on('click', '.days-b div', function(){
+            $(this).addClass('active-days').siblings().removeClass('active-days')
+
+            var months_b = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December']
+
+            // Print the complete date
+            var day_b = this.textContent
+            var monthName_b = document.querySelector('.date-b h5').textContent
+            var monthNumber_b = months_b.indexOf(monthName_b) + 1
+            var year_b = new Date().getFullYear().toString().slice()
+
+            // verifica se o dia selecionado é do mês anterior
+            if(this.classList.contains("prev-date")){
+                if(monthName_b == "January"){
+                    monthNumber_b = 12
+                    year_b = year_b - 1
+                }else{
+                    monthNumber_b = monthNumber_b - 1
+                }
+            }
+            // verifica se o dia selecionado é do mês seguinte
+            if(this.classList.contains("next-date")){
+                if(monthName_b == "December"){
+                    monthNumber_b = 1
+                    year_b = parseInt(year_b) + 1
+                }else{
+                    monthNumber_b = monthNumber_b + 1
+                }
+            }
+
+            var newYear_b = parseInt(year_b)
+            if(todaysMonthNumber_b - countPrev_b < 0){
+                var tmp_b = Math.ceil((countPrev_b - todaysMonthNumber_b) / 12)
+                newYear_b = newYear_b - tmp_b
+                var dateSelected_b = months_b[monthNumber_b-1] +" "+ day_b +" "+ newYear_b
+                document.querySelector('.date-b p').innerHTML = dateSelected_b;
+            }
+            else if(todaysMonthNumber_b + countNext_b > 11){
+                var tmp_b = Math.ceil((countNext_b - todaysMonthNumber_b) / 12)
+                newYear_b = newYear_b + tmp_b
+                var dateSelected_b = months_b[monthNumber_b-1] +" "+ day_b +" "+ newYear_b
+                document.querySelector('.date-b p').innerHTML = dateSelected_b;
+            }
+            else{
+                var dateSelected_b = months_b[monthNumber_b-1] +" "+ day_b +" "+ year_b
+                //console.log(dateSelected)
+                document.querySelector('.date-b p').innerHTML = dateSelected_b;
+            }
+        })
+    </script>
 
 </body>
 </html>

@@ -13,7 +13,7 @@ const renderCalendar = () => {
                    "October", "November", "December"];
 
     document.querySelector('.date h5').innerHTML = months[date.getMonth()];
-    document.querySelector('.date p').innerHTML = new Date().toDateString();
+    document.querySelector('.date p').innerHTML = new Date().toDateString().slice(4);
 
     let days = "";
     for(let x = firstDayIndex; x > 0; x--){
