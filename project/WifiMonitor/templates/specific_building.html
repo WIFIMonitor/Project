@@ -95,10 +95,25 @@
                                                     <div class="card-body">
                                                          <h3 class="card-title" align="center">Choose building</h3>
                                                         <div class="container" align="center">
-                                                            <form method="post" action="">
+                                                             <div class="d-none d-sm-inline-block mr-auto col-sm-5 navbar-search">
+                                                                <form method="post" action="{% url 'specific_building' %}">
+                                                                    {% csrf_token %}
+                                                                    <select class="" id = "sel" name = "buildSelect"  onchange="submit()" searchable="Search here.." >
+                                                                        <option value="" disabled selected>{{ default_message}}</option>
+                                                                        {% for id,name in buildings.items %}
+                                                                            <option value={{ id }}>{{ name }}</option>
+                                                                       {% endfor %}
+                                                                    </select>
+                                                                    <input id ="submitIn" type="hidden" name="myinput" value="0" />
+                                                                </form>
+                                                            </div>
 
-                                                                <input id ="submitIn"  name="buildInput"  />
-                                                            </form>
+                                                            <script>
+                                                                function submit(){ // trigger action
+                                                                    document.getElementById("submitIn").value = "1";
+                                                                }
+
+                                                            </script>
                                                         </div>
 
 

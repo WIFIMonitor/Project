@@ -3,7 +3,8 @@ from django.shortcuts import render
 from influxdb import InfluxDBClient
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
-
+global prev_id
+prev_id = 0
 def heatmap(request):
     return render(request, 'heatmap.html')
 
@@ -42,6 +43,28 @@ def population_building_graph(request):
         'data': data,
     })
 def specific_building(request):
+    global prev_id
+    buildings = dict(enumerate(get_building_names()))
+    print(buildings)
+    if request.method == "GET":  # carregar a pag
+        id = 0
+        building_name = "Choose your building"
+
+    if request.method == "POST":
+        id = request.POST["buildSelect"]
+        building_name = buildings[int(id)]
+
+    if (prev_id == id):
+        building_name = "Choose your country"
+
+    prev_id = id
+    tparams = {
+        'buildings': buildings,
+        'default_message': building_name,
+    }
+    return render(request, 'specific_building.html', tparams)
+
+
     return render(request, 'specific_building.html')
 def get_buildings_count():
     try:
@@ -70,6 +93,7 @@ def get_building_names():
     buildings = []
     for x in res:
         buildings.append(x[1])
+
 
     return buildings
 
