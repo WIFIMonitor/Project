@@ -38,16 +38,9 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="/timelapse" class='sidebar-link'>
-                                <i class="fas fa-history" style="color: white"></i>
-                                <span>Timelapse</span>
-                            </a>
-                        </li>
-
                         <li class="sidebar-item has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="fas fa-chart-area" style="color: white"></i>
+                                <i class="fas fa-chart-area" style="color: white; margin-right: 7px;"></i>
                                 <span>Analytics</span>
                             </a>
                              <ul class="submenu">
@@ -95,8 +88,47 @@
                                     <h5 class="card-title">Coming Soon!</h5>
                                 </div>
                                 <div class="card-body">
-                                    If you want to contribute. Check out this <a href="https://github.com/zuramai/mazer"
-                                        target="_blank">template repository</a>.
+                                    <!-- Button to launch modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timelapse">
+                                        <i class="fas fa-history" style="color: white"></i>Timelapse
+                                    </button>
+                                    <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="width: 800px">
+                                            <div class="modal-content">
+                                                <!-- Modal Header-->
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i data-feather="x"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- Modal Body-->
+                                                <div class="modal-body">
+                                                    <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
+                                                        <div class="card">
+                                                            <h3 class="card-title" align="center" style="font-size: 18px; margin-right: 12px;">Start Datetime</h3>
+                                                            <input align="center" type="datetime-local" style="margin-right: 12px;"/>
+                                                        </div>
+                                                        <div class="card">
+                                                            <h3 class="card-title" align="center" style="font-size: 18px; margin-left: 12px;">End Datetime</h3>
+                                                            <input align="center" type="datetime-local" style="margin-left: 12px;"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal Footer-->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                                        <i class="bx bx-x d-block d-sm-none"></i>
+                                                        <span class="d-none d-sm-block">Close</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                                        <span class="d-none d-sm-block">Generate</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -120,6 +152,7 @@
         </div>
     </div>
 
+    <!-- Javascript Files-->
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/main.js"></script>

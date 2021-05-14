@@ -22,7 +22,6 @@ urlpatterns = [
     path('', views.heatmap, name='heatmap'),
     path('population_building_graph/', views.population_building_graph, name='population_building_graph'),
     path('analytics/', views.analytics, name='analytics'),
-    path('timelapse/', views.timelapse, name='timelapse'),
     path('test/',views.test, name='test'),
     path('specific_building/', views.specific_building, name='specific_building'),
     path('line_graph/', views.line_graph, name='line_graph'),

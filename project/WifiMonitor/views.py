@@ -27,9 +27,6 @@ def analytics(request):
     }
     return render(request, 'analytics.html', tparams)
 
-def timelapse(request):
-    return render(request, 'timelapse.html')
-
 def test(request):
     return render(request, 'line_graph.html')
 
