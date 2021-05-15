@@ -5,12 +5,11 @@ from influxdb import InfluxDBClient
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
 prev_id = 0
+
 def heatmap(request):
     return render(request, 'heatmap.html')
 
 def analytics(request):
-
-
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >= now()-15m ").raw['series'][0]["values"][0][1]
         residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=now()-15m").raw['series'][0]["values"][0][1]
@@ -103,8 +102,5 @@ def get_building_names():
         buildings.append(x[1])
 
     return buildings
-
-def printHello():
-    return "hello"
 
 #get_building_names()
