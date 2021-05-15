@@ -104,4 +104,7 @@ def get_building_names():
 
     return buildings
 
+def printHello():
+    return "hello"
+
 #get_building_names()
