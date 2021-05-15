@@ -38,7 +38,7 @@ def population_building_graph(request):
         'labels': labels,
         'data': data,
     })
-def specific_building(request):
+def specific_building(request, building=None):
     global prev_id
     buildings = dict(enumerate(get_building_names()))
     #print(buildings)
@@ -51,7 +51,7 @@ def specific_building(request):
         building_name = buildings[int(id)]
 
     if (prev_id == id):
-        building_name = "Choose your country"
+        building_name = "Choose your building"
 
     prev_id = id
     tparams = {
@@ -64,8 +64,8 @@ def specific_building(request):
     return render(request, 'specific_building.html')
 
 def line_graph(request):
-    labels = [0,10,20,30,40,50,60]
-    data = [100,130,80,90,100,100,170]
+    labels = list(range(1, 24))
+    data = list(range(0, 200))
 
     return JsonResponse(data={
         'labels': labels,
@@ -102,5 +102,27 @@ def get_building_names():
         buildings.append(x[1])
 
     return buildings
+
+def get_building_lastday_population():
+    try:
+        #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
+        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
+        #print(res)
+        count = {}
+
+        #count(chave=edificio, value=n de pessoas no edificio)
+        for sample in res:
+            building = sample[1]
+            if building == 'ra':
+                continue
+            if building not in count:
+                count[building] = int(sample[2])
+            else:
+                count[building] = count[building] + int(sample[2])
+    except:
+        print('ERROR: getting data from DB')
+        count = {}
+
+    return count
 
 #get_building_names()
