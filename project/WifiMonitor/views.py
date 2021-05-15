@@ -102,7 +102,6 @@ def get_building_names():
     for x in res:
         buildings.append(x[1])
 
-
     return buildings
 
 #get_building_names()

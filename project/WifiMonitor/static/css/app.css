@@ -1597,3 +1597,10 @@ a {
 .icon-mid:before {
 	vertical-align: middle
 }
+
+.multi_select {
+	background-color: #e2e2e2;
+	color: black;
+	border-color: #e2e2e2;
+	border-radius: 3px
+}
