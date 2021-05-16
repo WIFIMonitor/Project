@@ -132,22 +132,6 @@
                 </section>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <hr>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
@@ -188,8 +172,16 @@
      $(function () {
 
       var $myGraph = $("#myGraph");
-      $.ajax({
-        url: $myGraph.data("url"),
+      var path = window.location.pathname;
+      var array = path.split("/");
+      var building = array[2];
+      console.log(building);
+      if(building == ""){
+
+      }else{
+          $.ajax({
+        url: $myGraph.data("url") + building,
+
         success: function (data) {
 
           var ctx = $myGraph[0].getContext("2d");
@@ -202,7 +194,7 @@
                 label: 'Population',
                 borderColor: 'red',
                 data: data.data
-              }]
+                }]
             },
 
 
@@ -227,6 +219,8 @@
 
         }
       });
+      }
+
 
     });
   </script>

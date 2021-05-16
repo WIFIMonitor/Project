@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
-
+import re
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
 prev_id = 0
@@ -64,11 +64,23 @@ def specific_building(request, building=None):
     return render(request, 'specific_building.html', tparams)
 
 
-    return render(request, 'specific_building.html')
 
-def line_graph(request):
-    labels = list(range(1, 24))
-    data = list(range(0, 200))
+
+
+
+
+def line_graph(request, building = None):
+    if(building != None):
+        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=now()-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+    print(values)
+    labels = []
+    data = []
+
+
+    for sample in values:
+        labels.append(sample[0][sample[0].find('T')+1 : -4])
+        data.append(sample[1])
+
 
     return JsonResponse(data={
         'labels': labels,
