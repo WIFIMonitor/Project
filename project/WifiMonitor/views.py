@@ -7,7 +7,10 @@ global prev_id
 prev_id = 0
 
 def heatmap(request):
-    return render(request, 'heatmap.html')
+    params = {
+    'api_key':'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
+    }
+    return render(request, 'heatmap.html',params)
 
 def analytics(request):
     try:
