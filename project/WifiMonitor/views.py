@@ -6,13 +6,16 @@ client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REM
 global prev_id
 prev_id = 0
 
+def index(request):
+    return render(request, 'index.html')
+
 def heatmap(request):
     params = {
     'api_key':'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
     }
     return render(request, 'heatmap.html',params)
 
-def analytics(request):
+def overview(request):
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >= now()-15m ").raw['series'][0]["values"][0][1]
         residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=now()-15m").raw['series'][0]["values"][0][1]
@@ -27,7 +30,10 @@ def analytics(request):
         'residentials_people_count' : residentials_people_count,
         'campus_people_count' : campus_people_count
     }
-    return render(request, 'analytics.html', tparams)
+    return render(request, 'overview.html', tparams)
+
+def campus_distribution(request):
+    return render(request, 'campus_distribution.html')
 
 def test(request):
     return render(request, 'line_graph.html')

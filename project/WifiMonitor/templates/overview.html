@@ -25,7 +25,7 @@
                 <div class="sidebar-head">
                     <div class="col-md-4 col-sm-4">
                         <a href="/">
-                            <img class="img-header" src="/static/images/logo/Logo.png" width="198%" height="100%">
+                            <img class="img-header" src="/static/images/logo/Logo.png" width="260%" height="100%">
                         </a>
                     </div>
                 </div>
@@ -42,21 +42,18 @@
 
                         <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="fas fa-chart-area" style="color: white"></i>
+                                <i class="fas fa-chart-area" style="color: white; margin-right: 7px;"></i>
                                 <span>Analytics</span>
                             </a>
-                            <ul class="submenu active">
-                                <li class="submenu-item active">
-                                    <a href="/analytics" style="color: white">Overview</a>
+                             <ul class="submenu">
+                                <li class="submenu-item ">
+                                    <a href="/overview" style="color: white">Overview</a>
+                                </li>
+                                 <li class="submenu-item ">
+                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="/specific_building" style="color: white">Specific building</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href=""style="color: white">to implement</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href=""style="color: white">to implement</a>
+                                    <a href="/specific_building" style="color: white">Building Statistics/a>
                                 </li>
                             </ul>
                         </li>
@@ -73,7 +70,10 @@
             </header>
 
             <div class="page-heading">
-                <h3>Profile Statistics</h3>
+                <h3>Overview</h3>
+                <br>
+                <h5>In the future this page will present several statistics regarding the UA WiFi network.</h5>
+                <h5>Working on it...</h5>
             </div>
 
             <div class="page-content">
@@ -149,30 +149,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Distribution through buildings</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+{#                        <div class="row">#}
+{#                            <div class="col-12">#}
+{#                                <div class="card">#}
+{#                                    <div class="card-header">#}
+{#                                        <h4>Distribution through buildings</h4>#}
+{#                                    </div>#}
+{#                                    <div class="card-body">#}
+{#                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
                     </div>
 
-                    <div class="col-12 col-lg-3">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Visitors Profile</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-visitors-profile"></div>
-                            </div>
-                        </div>
-                    </div>
+
                 </section>
             </div>
 

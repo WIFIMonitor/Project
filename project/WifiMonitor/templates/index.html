@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>***REMOVED***</title>
+    <link rel="shortcut icon" href="/static/images/logo/logoTitle.png" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="/static/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    
+    <script src="/static/js/heatmap.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
+</head>
+
+<body onload="myMap()">
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-head">
+                    <div class="col-md-4 col-sm-4">
+                        <a href="/">
+                            <img class="img-header" src="/static/images/logo/Logo.png" width="260%" height="100%">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-menu sidebar-text">
+                    <ul class="menu">
+                        <li class="sidebar-title ">Menu</li>
+                        <li class="sidebar-item active">
+                            <a href="/heatmap" class='sidebar-link'>
+                                <i class="fas fa-map-marked-alt" style="color: white"></i>
+                                <span>Heatmap</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="fas fa-chart-area" style="color: white; margin-right: 7px;"></i>
+                                <span>Analytics</span>
+                            </a>
+                             <ul class="submenu">
+                                <li class="submenu-item ">
+                                    <a href="/overview" style="color: white">Overview</a>
+                                </li>
+                                 <li class="submenu-item ">
+                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="/specific_building" style="color: white">Building Statistics</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        </div>
+        <div id="main" style="background: #f1f1f1">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+
+
+            <hr>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="top-pad">
+                    <div class="float-start">
+                        <p>2021 &copy; WiFi Monitor</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Projeto em Engenharia Informática - Grupo 05 - MIECT</p>
+                    </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Javascript Files-->
+    <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <!-- Get Buildings to the multi select element -->
+    <script type="text/javascript">
+
+
+        const multiSelect = document.querySelector('.multi_select');
+        let building = "";
+        for (let i = 1; i <= 10; i++){
+            building += `<option class="building">${i}</option>`;
+            multiSelect.innerHTML = building;
+        }
+    </script>
+</body>
+</html>
