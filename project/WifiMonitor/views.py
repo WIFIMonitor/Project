@@ -14,7 +14,7 @@ prev_id = 0
 # wants to check the heatmap
 def load_ap_coords():
     people_count = client.query("select id,clientsCount from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
-
+    
     hash_coords = {}
     for line in people_count:
         hash_coords[line[1]] = line[2]
@@ -34,12 +34,11 @@ def load_ap_coords():
  
     return coords
  
-ap_coordinates = load_ap_coords()
-
 def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
+    ap_coordinates = load_ap_coords()
     params = {
     'api_key':'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
     'data' : json.dumps(ap_coordinates)
