@@ -29,7 +29,7 @@
 		
 		for(var i=0;i<heatmapData.length;i++)
 		{
-			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people*100});
+			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people});
 		}
 		  map = new google.maps.Map(document.getElementById("map"), {
 		    zoom: 16,
@@ -39,7 +39,9 @@
 		  heatmap = new google.maps.visualization.HeatmapLayer({
 		    data: dados,
 		    map: map,
-		    radius: 25,
+		    maxIntensity: 100,
+                    radius: 20,
+                    opacity: 0.6
 		    });	
          }  
     </script>
