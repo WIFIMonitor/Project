@@ -16,11 +16,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     
-    <script src="/static/js/heatmap.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
+	
+    <script type = "text/javascript">
+    	
+	function myfunction() {
+		let map, heatmap;
+		var heatmapData = JSON.parse("{{data|escapejs}}");
+		
+		console.log(heatmapData)
+		var dados = []
+		
+		for(var i=0;i<heatmapData.length;i++)
+		{
+			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people*100});
+		}
+		  map = new google.maps.Map(document.getElementById("map"), {
+		    zoom: 16,
+		    center: { lat: 40.63129560, lng: -8.65810583 },
+		    mapTypeId: "satellite",
+		  });
+		  heatmap = new google.maps.visualization.HeatmapLayer({
+		    data: dados,
+		    map: map,
+		    radius: 25,
+		    });	
+         }  
+    </script>
+
 </head>
 
-<body onload="myMap()">
+<body onload="myfunction()">
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
@@ -193,5 +219,6 @@
             multiSelect.innerHTML = building;
         }
     </script>
+
 </body>
 </html>

@@ -2,9 +2,39 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
 import re
+import json
+
+
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
 prev_id = 0
+
+# load ap cooordinates into memory, so that we dont 
+# have to read the excel file every time someone
+# wants to check the heatmap
+def load_ap_coords():
+    people_count = client.query("select id,clientsCount from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
+
+    hash_coords = {}
+    for line in people_count:
+        hash_coords[line[1]] = line[2]
+
+    coords = []
+    f = open("WifiMonitor/static/fileCoords.txt","r")
+    
+    for line in f:
+        info = line.split(",")
+        
+        dic = { "id" : info[0],
+        "lat" : info[1],
+        "lon" : info[2].strip('\n'),
+        "people" : hash_coords[info[0]]
+        }
+        coords.append(dic)
+ 
+    return coords
+ 
+ap_coordinates = load_ap_coords()
 
 def index(request):
     return render(request, 'index.html')
@@ -12,7 +42,9 @@ def index(request):
 def heatmap(request):
     params = {
     'api_key':'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
+    'data' : json.dumps(ap_coordinates)
     }
+    
     return render(request, 'heatmap.html',params)
 
 def overview(request):
@@ -47,6 +79,7 @@ def population_building_graph(request):
         'labels': labels,
         'data': data,
     })
+
 def specific_building(request, building=None):
     global prev_id
     buildings = dict(enumerate(get_building_names()))
@@ -69,19 +102,12 @@ def specific_building(request, building=None):
     }
     return render(request, 'specific_building.html', tparams)
 
-
-
-
-
-
-
 def line_graph(request, building = None):
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=now()-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
     print(values)
     labels = []
     data = []
-
 
     for sample in values:
         labels.append(sample[0][sample[0].find('T')+1 : -4])
@@ -92,7 +118,6 @@ def line_graph(request, building = None):
         'labels': labels,
         'data': data,
     })
-
 
 def get_buildings_count():
     try:
