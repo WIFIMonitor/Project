@@ -40,11 +40,11 @@ def index(request):
 def heatmap(request):
     ap_coordinates = load_ap_coords()
     params = {
-    'api_key':'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
+    'api_key': 'AIzaSyBk0ZnJTY4g4euP07og1_w5_5FSRcJ-y4k',
     'data' : json.dumps(ap_coordinates)
     }
     
-    return render(request, 'heatmap.html',params)
+    return render(request, 'heatmap.html', params)
 
 def overview(request):
     try:

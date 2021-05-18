@@ -49,11 +49,11 @@
                                 <li class="submenu-item ">
                                     <a href="/overview" style="color: white">Overview</a>
                                 </li>
-                                 <li class="submenu-item ">
-                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>
-                                </li>
+{#                                 <li class="submenu-item ">#}
+{#                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
+{#                                </li>#}
                                 <li class="submenu-item ">
-                                    <a href="/specific_building" style="color: white">Building Statistics/a>
+                                    <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
                             </ul>
                         </li>
@@ -73,7 +73,7 @@
                 <h3>Overview</h3>
                 <br>
                 <h5>In the future this page will present several statistics regarding the UA WiFi network.</h5>
-                <h5>Working on it...</h5>
+                <h5></h5>
             </div>
 
             <div class="page-content">
@@ -131,36 +131,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-3 col-md-6">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="stats-icon red">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Saved Post</h6>
-                                                <h6 class="font-extrabold mb-0">112</h6>
-                                            </div>
-                                        </div>
+                                    <div class="card-header">
+                                        <h4>Distribution through buildings</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
-{#                        <div class="row">#}
-{#                            <div class="col-12">#}
-{#                                <div class="card">#}
-{#                                    <div class="card-header">#}
-{#                                        <h4>Distribution through buildings</h4>#}
-{#                                    </div>#}
-{#                                    <div class="card-body">#}
-{#                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
                     </div>
 
 

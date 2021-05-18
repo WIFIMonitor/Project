@@ -79,9 +79,9 @@
                                 <li class="submenu-item ">
                                     <a href="/overview" style="color: white">Overview</a>
                                 </li>
-                                 <li class="submenu-item ">
-                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>
-                                </li>
+{#                                 <li class="submenu-item ">#}
+{#                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
+{#                                </li>#}
                                 <li class="submenu-item ">
                                     <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
@@ -108,7 +108,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-content">
-                                    	<div id='map' style='height:650px;width:100%;'></div>
+                                    	<div id='map' style='height:500px; width:100%;'></div>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +178,11 @@
                                     <div class="card" style="padding-right: 10px;">
                                         <div class="multi_select_box">
                                             <select class="multi_select" style="height: 35px">
-                                                <option class="building"></option>
+                                                <option class="building">DETI</option>
+                                                <option class="building">ESSUA</option>
+                                                <option class="building">DEM</option>
+                                                <option class="building">CP</option>
+                                                <option class="building">DECA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -212,14 +216,12 @@
 
     <!-- Get Buildings to the multi select element -->
     <script type="text/javascript">
-
-
-        const multiSelect = document.querySelector('.multi_select');
-        let building = "";
-        for (let i = 1; i <= 10; i++){
-            building += `<option class="building">${i}</option>`;
-            multiSelect.innerHTML = building;
-        }
+        {#const multiSelect = document.querySelector('.multi_select');#}
+        {#let building = "";#}
+        {#for (let i = 1; i <= 10; i++){#}
+        {#    building += `<option class="building">${i}</option>`;#}
+        {#    multiSelect.innerHTML = building;#}
+        {#}#}
     </script>
 
 </body>
