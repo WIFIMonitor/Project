@@ -23,8 +23,7 @@
 	function myfunction() {
 		let map, heatmap;
 		var heatmapData = JSON.parse("{{data|escapejs}}");
-		
-		console.log(heatmapData)
+
 		var dados = []
 		
 		for(var i=0;i<heatmapData.length;i++)
@@ -32,7 +31,7 @@
 			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people});
 		}
 		  map = new google.maps.Map(document.getElementById("map"), {
-		    zoom: 17,
+		    zoom: 16,
 		    center: { lat: 40.63129560, lng: -8.65810583 },
 		    mapTypeId: "satellite",
 		  });
@@ -108,7 +107,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-content">
-                                    	<div id='map' style='height:500px; width:100%;'></div>
+                                    	<div id='map' style='height:800px; width:100%;'></div>
                                     </div>
                                 </div>
                             </div>
