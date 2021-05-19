@@ -25,24 +25,39 @@
 		var heatmapData = JSON.parse("{{data|escapejs}}");
 
 		var dados = []
-		
+	    <!-- Create the map points, from the json passed above. Each coordinates weight is the ammount of poeple connected -->	
 		for(var i=0;i<heatmapData.length;i++)
 		{
 			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people});
 		}
+
+        <!-- Create map, with it's center on UA --> 
 		  map = new google.maps.Map(document.getElementById("map"), {
 		    zoom: 16,
 		    center: { lat: 40.63129560, lng: -8.65810583 },
 		    mapTypeId: "satellite",
 		  });
+
+        <!-- Create heatmap layer with the data from the database -->
 		  heatmap = new google.maps.visualization.HeatmapLayer({
 		    data: dados,
 		    map: map,
 		    maxIntensity: 70,
                     radius: 15,
                     opacity: 0.6
-		    });	
-         }  
+		    });
+       
+        <!-- Add an event listener, so that everytime the zoom changes, the heatmal radius around the AP's change as well -->
+        map.addListener('zoom_changed', () => {
+            console.log(map.getZoom());
+            zoom = map.getZoom();
+            <!-- RADIUS FUNCTION YET TO BE IMPLEMENTED -->  
+            if(zoom == 18)
+            {
+                heatmap.set("radius",50);
+            }
+        });
+         }
     </script>
 
 </head>
