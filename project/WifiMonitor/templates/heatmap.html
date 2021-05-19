@@ -43,20 +43,19 @@
 		    data: dados,
 		    map: map,
 		    maxIntensity: 70,
-                    radius: 15,
+                    radius: 25,
                     opacity: 0.6
 		    });
        
         <!-- Add an event listener, so that everytime the zoom changes, the heatmal radius around the AP's change as well -->
         map.addListener('zoom_changed', () => {
-            console.log(map.getZoom());
             zoom = map.getZoom();
-            <!-- RADIUS FUNCTION YET TO BE IMPLEMENTED -->  
-            if(zoom == 18)
-            {
-                heatmap.set("radius",50);
-            }
-        });
+            <!-- RADIUS FUNCTION  =  f(x)=32.678x-480.536  where x is zoom -->  
+                radius = 32.6786*(zoom) - 480.536;
+                console.log(zoom);
+                console.log(radius);
+                heatmap.set("radius",radius);
+            });
          }
     </script>
 
