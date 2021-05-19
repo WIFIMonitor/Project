@@ -51,10 +51,13 @@
         map.addListener('zoom_changed', () => {
             zoom = map.getZoom();
             <!-- RADIUS FUNCTION  =  f(x)=32.678x-480.536  where x is zoom -->  
-                radius = 32.6786*(zoom) - 480.536;
+                var radius = (32.6786*(zoom) - 480.536);
+                var maxintensity = 7.85714*(zoom) - 50.7143;
+                if(radius < 0) radius = 10;
                 console.log(zoom);
                 console.log(radius);
                 heatmap.set("radius",radius);
+                heatmap.set("maxIntensity",maxintensity);
             });
          }
     </script>
