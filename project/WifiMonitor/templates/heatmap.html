@@ -17,9 +17,13 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 	
     <script type = "text/javascript">
-    	
+    
+    var markers=[];
+    var newMarker;
+
 	function myfunction() {
 		let map, heatmap;
 		var heatmapData = JSON.parse("{{data|escapejs}}");
@@ -59,6 +63,44 @@
                 heatmap.set("radius",radius);
                 heatmap.set("maxIntensity",maxintensity);
             });
+
+            for(var i=0;i<heatmapData.length;i++){
+                newMarker = new google.maps.Marker({
+                position: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon),
+                icon: {
+                    url: 'https://png.vector.me/files/images/3/8/387560/wireless_logo_preview',
+                    scaledSize: new google.maps.Size(30, 30)
+                },
+                map: map,
+                });
+                newMarker.category=1;
+                newMarker.setVisible(false);
+                markers.push(newMarker);
+                console.log(newMarker);
+            }
+
+         }
+
+         function displayMarkers(obj,category) {
+             var i;
+            console.log(markers[1]);
+             for (i = 0; i < markers.length; i++)
+             {   
+                     if (markers[i].category === category) {
+                         if ($(obj).is(":checked")) {
+
+                             markers[i].setVisible(true);
+                         } else {
+                             markers[i].setVisible(false);    
+                         }
+                     } 
+                     else 
+                     {
+                         markers[i].setVisible(false);
+                     }
+                 }
+
+
          }
     </script>
 
@@ -135,6 +177,7 @@
                         <div class="card">
                             <div class="card-header" style="text-align: center">
                                 <h4>Want to generate an heatmap timelapse?</h4>
+                                <input type="checkbox" value="Show Group 1" onclick="displayMarkers(this,1);">
                             </div>
                             <div class="card-body" style="align-self: center">
                                 <!-- Button to launch modal -->
