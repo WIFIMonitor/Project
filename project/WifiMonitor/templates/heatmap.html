@@ -6,107 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>***REMOVED***</title>
     <link rel="shortcut icon" href="/static/images/logo/logoTitle.png" type="image/x-icon">
-
+    
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link rel="stylesheet" href="/static/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="/static/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/app.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 	
     <script type = "text/javascript">
-    
-    var markers=[];
-    var newMarker;
-
-	function myfunction() {
-		let map, heatmap;
-		var heatmapData = JSON.parse("{{data|escapejs}}");
-
-		var dados = []
-	    <!-- Create the map points, from the json passed above. Each coordinates weight is the ammount of poeple connected -->	
-		for(var i=0;i<heatmapData.length;i++)
-		{
-			dados.push({location: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon), weight: heatmapData[i].people});
-		}
-
-        <!-- Create map, with it's center on UA --> 
-		  map = new google.maps.Map(document.getElementById("map"), {
-		    zoom: 16,
-		    center: { lat: 40.63129560, lng: -8.65810583 },
-		    mapTypeId: "satellite",
-		  });
-
-        <!-- Create heatmap layer with the data from the database -->
-		  heatmap = new google.maps.visualization.HeatmapLayer({
-		    data: dados,
-		    map: map,
-		    maxIntensity: 70,
-                    radius: 25,
-                    opacity: 0.6
-		    });
-       
-        <!-- Add an event listener, so that everytime the zoom changes, the heatmal radius around the AP's change as well -->
-        map.addListener('zoom_changed', () => {
-            zoom = map.getZoom();
-            <!-- RADIUS FUNCTION  =  f(x)=32.678x-480.536  where x is zoom -->  
-                var radius = (32.6786*(zoom) - 480.536);
-                var maxintensity = 7.85714*(zoom) - 50.7143;
-                if(radius < 0) radius = 10;
-                console.log(zoom);
-                console.log(radius);
-                heatmap.set("radius",radius);
-                heatmap.set("maxIntensity",maxintensity);
-            });
-
-            for(var i=0;i<heatmapData.length;i++){
-                newMarker = new google.maps.Marker({
-                position: new google.maps.LatLng(heatmapData[i].lat,heatmapData[i].lon),
-                icon: {
-                    url: 'https://png.vector.me/files/images/3/8/387560/wireless_logo_preview',
-                    scaledSize: new google.maps.Size(30, 30)
-                },
-                map: map,
-                });
-                newMarker.category=1;
-                newMarker.setVisible(false);
-                markers.push(newMarker);
-                console.log(newMarker);
-            }
-
-         }
-
-         function displayMarkers(obj,category) {
-             var i;
-            console.log(markers[1]);
-             for (i = 0; i < markers.length; i++)
-             {   
-                     if (markers[i].category === category) {
-                         if ($(obj).is(":checked")) {
-
-                             markers[i].setVisible(true);
-                         } else {
-                             markers[i].setVisible(false);    
-                         }
-                     } 
-                     else 
-                     {
-                         markers[i].setVisible(false);
-                     }
-                 }
-
-
-         }
+        var heatmapData = JSON.parse("{{data|escapejs}}");
     </script>
-
+    <script src="../static/js/heatmap.js"></script>
 </head>
 
-<body onload="myfunction()">
+<body onload="loadMap()">
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
@@ -133,13 +54,13 @@
                                 <i class="fas fa-chart-area" style="color: white; margin-right: 7px;"></i>
                                 <span>Analytics</span>
                             </a>
-                             <ul class="submenu">
+                            <ul class="submenu">
                                 <li class="submenu-item ">
                                     <a href="/overview" style="color: white">Overview</a>
                                 </li>
-{#                                 <li class="submenu-item ">#}
-{#                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
-{#                                </li>#}
+                                {# <li class="submenu-item ">#}
+                                    {# <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
+                                    {# </li>#}
                                 <li class="submenu-item ">
                                     <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
@@ -150,24 +71,23 @@
             </div>
         </div>
 
-        </div>
-        <div id="main" style="background: #f1f1f1">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
-            </header>
+    </div>
+    <div id="main" style="background: #f1f1f1">
+        <header class="mb-3">
+            <a href="#" class="burger-btn d-block d-xl-none">
+                <i class="bi bi-justify fs-3"></i>
+            </a>
+        </header>
 
-            <div class="page-heading">
-                <h3 style="margin-bottom: 25px;">Heatmap</h3>
-                <section class="row">
-                    <div class="col-12 col-lg-9">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                    	<div id='map' style='height:800px; width:100%;'></div>
-                                    </div>
+        <div class="page-heading">
+            <h3 style="margin-bottom: 25px;">Heatmap</h3>
+            <section class="row">
+                <div class="col-12 col-lg-9">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div id='map' style='height:800px; width:100%;'></div>
                                 </div>
                             </div>
                         </div>
@@ -207,65 +127,68 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal Footer-->
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                                    <i class="bx bx-x d-block d-sm-none"></i>
-                                                    <span class="d-none d-sm-block">Close</span>
-                                                </button>
-                                                <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                                    <span class="d-none d-sm-block">Generate</span>
-                                                </button>
-                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Thinking of going to campus ?-->
-                        <div class="card">
-                            <div class="card-header" style="text-align: center">
-                                <h4>Thinking of going to campus?</h4>
-                            </div>
-                            <div class="card-body" style="align-self: center">
-                                <div class="card-group">
-                                    <div class="card"  style="padding-right: 20px">
-                                        <button type="button" class="btn btn-primary" style="height: 35px; width: 60px">Yes</button>
-                                    </div>
-                                    <div class="card" style="padding-right: 10px;">
-                                        <div class="multi_select_box">
-                                            <select class="multi_select" style="height: 35px">
-                                                <option class="building">DETI</option>
-                                                <option class="building">ESSUA</option>
-                                                <option class="building">DEM</option>
-                                                <option class="building">CP</option>
-                                                <option class="building">DECA</option>
-                                            </select>
+                                        <!-- Modal Footer-->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light-secondary"
+                                                data-bs-dismiss="modal">
+                                                <i class="bx bx-x d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Close</span>
+                                            </button>
+                                            <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                                                <i class="bx bx-check d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Generate</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
 
-            <hr>
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="top-pad">
+                    <!-- Thinking of going to campus ?-->
+                    <div class="card">
+                        <div class="card-header" style="text-align: center">
+                            <h4>Thinking of going to campus?</h4>
+                        </div>
+                        <div class="card-body" style="align-self: center">
+                            <div class="card-group">
+                                <div class="card" style="padding-right: 20px">
+                                    <button type="button" class="btn btn-primary"
+                                        style="height: 35px; width: 60px">Yes</button>
+                                </div>
+                                <div class="card" style="padding-right: 10px;">
+                                    <div class="multi_select_box">
+                                        <select class="multi_select" style="height: 35px">
+                                            <option class="building">DETI</option>
+                                            <option class="building">ESSUA</option>
+                                            <option class="building">DEM</option>
+                                            <option class="building">CP</option>
+                                            <option class="building">DECA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <hr>
+        <footer>
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="top-pad">
                     <div class="float-start">
                         <p>2021 &copy; WiFi Monitor</p>
                     </div>
                     <div class="float-end">
                         <p>Projeto em Engenharia Informática - Grupo 05 - MIECT</p>
                     </div>
-                    </div>
                 </div>
-            </footer>
-        </div>
+            </div>
+        </footer>
+    </div>
     </div>
 
     <!-- Javascript Files-->
@@ -277,10 +200,11 @@
     <script type="text/javascript">
         {#const multiSelect = document.querySelector('.multi_select');#}
         {#let building = "";#}
-        {#for (let i = 1; i <= 10; i++){#}
-        {#    building += `<option class="building">${i}</option>`;#}
-        {#    multiSelect.innerHTML = building;#}
-        {#}#}
+        {#for(let i = 1; i <= 10; i++) {#}
+            {#    building += `<option class="building">${i}</option>`;#}
+            {#    multiSelect.innerHTML = building;#}
+            {#}#
+        }
     </script>
 
 </body>

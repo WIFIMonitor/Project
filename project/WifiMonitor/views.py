@@ -13,7 +13,7 @@ prev_id = 0
 # have to read the excel file every time someone
 # wants to check the heatmap
 def load_ap_coords():
-    people_count = client.query("select id,clientsCount from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
+    people_count = client.query("select id,clientsCount from clientsCount where time >= now()-15m").raw['series'][0]["values"]
     
     hash_coords = {}
     for line in people_count:
@@ -31,7 +31,8 @@ def load_ap_coords():
         "people" : hash_coords[info[0]]
         }
         coords.append(dic)
- 
+    
+    f.close()
     return coords
  
 def index(request):
