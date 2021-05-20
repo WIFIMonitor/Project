@@ -33,9 +33,7 @@ function loadMap() {
     });
     
     // criar a janela de informação que é ativada quando se clica num AP
-    const infowindow = new google.maps.InfoWindow({
-        content: "AP 1",
-    });
+    const infowindow = new google.maps.InfoWindow({});
     
     for (var i = 0; i < heatmapData.length; i++) {
         //criar um marker nas coordenadas do AP
@@ -45,6 +43,7 @@ function loadMap() {
                 url: 'https://png.vector.me/files/images/3/8/387560/wireless_logo_preview',
                 scaledSize: new google.maps.Size(30, 30)
             },
+            title: "Latitude: " + heatmapData[i].lat + " Longitude: " + heatmapData[i].lon + " Pessoas: " + heatmapData[i].people,
             map: map,
         });
         // colocar o marker escondido por defeito
@@ -53,6 +52,8 @@ function loadMap() {
         
         // adicionar um listener, para quando se clica nele, aparecer uma janela de informação
         marker.addListener('click', () => {
+            infowindow.close();
+            infowindow.setContent(marker.getTitle());
             infowindow.open(map, marker);
         });
 
