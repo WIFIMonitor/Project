@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
-import re
 import json
 
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 # get the last timestamp value of the database
 lastValueTS = client.query("select last(clientsCount) from clientsCount").raw['series'][0]['values']
-
+# Get the date of the measures being displayed
+timestamp = "Dia: "+lastValueTS[0][0].replace("T"," às ")[:-8]
 global prev_id
 prev_id = 0
 
@@ -38,13 +38,13 @@ def load_ap_coords():
         coords.append(dic)
     
     f.close()
-    return coords,"Dia: "+lastValueTS[0][0].replace("T"," às ")[:-8]
+    return coords
  
 def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
-    ap_coordinates,timestamp = load_ap_coords()
+    ap_coordinates = load_ap_coords()
     params = {
     'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
     'data' : json.dumps(ap_coordinates),
@@ -55,8 +55,8 @@ def heatmap(request):
 
 def overview(request):
     try:
-        people_count = client.query("select sum(clientsCount) from clientsCount where time >= now()-15m ").raw['series'][0]["values"][0][1]
-        residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=now()-15m").raw['series'][0]["values"][0][1]
+        people_count = client.query("select sum(clientsCount) from clientsCount where time >=\'"+lastValueTS[0][0]+"\'-15m ").raw['series'][0]["values"][0][1]
+        residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=\'"+lastValueTS[0][0]+"\'-15m").raw['series'][0]["values"][0][1]
         campus_people_count = people_count - residentials_people_count
     except:
         people_count = "null"
@@ -66,7 +66,8 @@ def overview(request):
     tparams = {
         'people_count' : people_count,
         'residentials_people_count' : residentials_people_count,
-        'campus_people_count' : campus_people_count
+        'campus_people_count' : campus_people_count,
+        'time':timestamp
     }
     return render(request, 'overview.html', tparams)
 
@@ -105,12 +106,13 @@ def specific_building(request, building=None):
     tparams = {
         'buildings': buildings,
         'default_message': building_name,
+        'time':timestamp
     }
     return render(request, 'specific_building.html', tparams)
 
 def line_graph(request, building = None):
     if(building != None):
-        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=now()-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+lastValueTS[0][0]+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
     print(values)
     labels = []
     data = []
@@ -128,7 +130,7 @@ def line_graph(request, building = None):
 def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
-        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
+        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= \'"+lastValueTS[0][0]+"\'-15m ").raw['series'][0]["values"]
         #print(res)
         count = {}
 
@@ -158,7 +160,7 @@ def get_building_names():
 def get_building_lastday_population():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
-        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= now()-15m ").raw['series'][0]["values"]
+        res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >=\'"+lastValueTS[0][0]+"\'-15m ").raw['series'][0]["values"]
         #print(res)
         count = {}
 
