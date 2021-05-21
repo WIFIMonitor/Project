@@ -40,8 +40,8 @@ function loadMap() {
         const marker = new google.maps.Marker({
             position: new google.maps.LatLng(heatmapData[i].lat, heatmapData[i].lon),
             icon: {
-                url: 'https://png.vector.me/files/images/3/8/387560/wireless_logo_preview',
-                scaledSize: new google.maps.Size(30, 30)
+                url: '/static/images/ap_icon.png',
+                scaledSize: new google.maps.Size(25,25)
             },
             title: "Latitude: " + heatmapData[i].lat + " Longitude: " + heatmapData[i].lon + " Pessoas: " + heatmapData[i].people,
             map: map,

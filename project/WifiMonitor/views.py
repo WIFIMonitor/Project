@@ -6,6 +6,9 @@ import json
 
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+# get the last timestamp value of the database
+lastValueTS = client.query("select last(clientsCount) from clientsCount").raw['series'][0]['values']
+
 global prev_id
 prev_id = 0
 
@@ -13,8 +16,10 @@ prev_id = 0
 # have to read the excel file every time someone
 # wants to check the heatmap
 def load_ap_coords():
-    people_count = client.query("select id,clientsCount from clientsCount where time >= now()-15m").raw['series'][0]["values"]
-    
+    # subtract from the last value, the last 15 minutes
+    sq = "select id,clientsCount from clientsCount where time >= \'"+lastValueTS[0][0]+"\'-15m"
+    # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
+    people_count = client.query(sq).raw['series'][0]["values"]
     hash_coords = {}
     for line in people_count:
         hash_coords[line[1]] = line[2]
@@ -33,16 +38,17 @@ def load_ap_coords():
         coords.append(dic)
     
     f.close()
-    return coords
+    return coords,"Dia: "+lastValueTS[0][0].replace("T"," às ")[:-8]
  
 def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
-    ap_coordinates = load_ap_coords()
+    ap_coordinates,timestamp = load_ap_coords()
     params = {
     'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
-    'data' : json.dumps(ap_coordinates)
+    'data' : json.dumps(ap_coordinates),
+    'time' : timestamp
     }
     
     return render(request, 'heatmap.html', params)
