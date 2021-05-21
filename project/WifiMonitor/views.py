@@ -29,11 +29,11 @@ def load_ap_coords():
     
     for line in f:
         info = line.split(",")
-        
         dic = { "id" : info[0],
         "lat" : info[1],
         "lon" : info[2].strip('\n'),
-        "people" : hash_coords[info[0]] if info[0] in hash_coords else 0
+        "people" : hash_coords[info[0]] if info[0] in hash_coords else 0,
+        "piso" : info[3] if info[3]!="None\n" else "Não Definido"
         }
         coords.append(dic)
     

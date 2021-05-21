@@ -1,59 +1,33 @@
-// This example requires the Visualization library. Include the libraries=visualization
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
 var dados = [];
 let markersArray = [];
 let map;
 let displayFlag = true;
 function loadMap() {
 
-    for (var i = 0; i < heatmapData.length; i++) {
-        // only add to the heatmap, AP's that have people connected. They still get added to the markers with 0 people connected
-        if(heatmapData[i].people > 0){
-            dados.push({location: new google.maps.LatLng(heatmapData[i].lat, heatmapData[i].lon), weight: heatmapData[i].people});
-        }
-    }
+    // criar a janela de informação que é ativada quando se clica num AP
+    const infowindow = new google.maps.InfoWindow({});
 
+    // create the map
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 16,
         center: {lat: 40.63129560, lng: -8.65810583},
         mapTypeId: "satellite",
     });
 
-    const centerApShow = document.createElement("div");
-    CenterControl(centerApShow, map);
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerApShow);
-
-
-    heatmap = new google.maps.visualization.HeatmapLayer({
-        data: dados,
-        map: map,
-        maxIntensity: 70,
-        radius: 25,
-        opacity: 0.6
-    });
-
-    map.addListener('zoom_changed', () => {
-        zoom = map.getZoom();
-        var radius = 3.076 + 0.00294182 * Math.pow(2.71828, 0.561249 * (zoom));
-        var maxintensity = 48.9302 + 0.0475174 * Math.pow(2.71828, 0.244225 * (zoom));
-        if (radius < 0) radius = 10;
-        heatmap.set("radius", radius);
-        heatmap.set("maxIntensity", maxintensity);
-    });
-
-    // criar a janela de informação que é ativada quando se clica num AP
-    const infowindow = new google.maps.InfoWindow({});
-
     for (var i = 0; i < heatmapData.length; i++) {
+        // only add to the heatmap, AP's that have people connected. They still get added to the markers with 0 people connected
+        if(heatmapData[i].people > 0){
+            dados.push({location: new google.maps.LatLng(heatmapData[i].lat, heatmapData[i].lon), weight: heatmapData[i].people});
+        }
+        
         //criar um marker nas coordenadas do AP
         const marker = new google.maps.Marker({
             position: new google.maps.LatLng(heatmapData[i].lat, heatmapData[i].lon),
             icon: {
-                url: '/static/images/ap_icon.png',
-                scaledSize: new google.maps.Size(25, 25)
+                url: '/static/images/ap_icon.ico',
+                scaledSize: new google.maps.Size(20, 20)
             },
-            title: "Latitude: " + heatmapData[i].lat + " Longitude: " + heatmapData[i].lon + " Pessoas: " + heatmapData[i].people,
+            title: "Latitude: " + heatmapData[i].lat + " | Longitude: " + heatmapData[i].lon + " | Pessoas: " + heatmapData[i].people + " | Piso: "+heatmapData[i].piso,
             map: map,
         });
         // colocar o marker escondido por defeito
@@ -64,13 +38,40 @@ function loadMap() {
             infowindow.close();
             infowindow.setContent(marker.getTitle());
             infowindow.open(map, marker);
-            // hide the infowindow after 5 seconds
-            setTimeout(function(){infowindow.close();}, '5000');
         });
+
+        // adicionar um listener ao marker, para quando o rato sai do icon, a janela de informação desaparecer
+        marker.addListener('mouseout', () => {
+            infowindow.close();
+        })
 
         //adicionar o marker ao array de markers, para conseguir-mos dar toggle ON e OFF
         markersArray.push(marker);
     }
+
+
+    const centerApShow = document.createElement("div");
+    CenterControl(centerApShow, map);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerApShow);
+
+    // criar a layer do heatmap
+    heatmap = new google.maps.visualization.HeatmapLayer({
+        data: dados,
+        map: map,
+        maxIntensity: 70,
+        radius: 25,
+        opacity: 0.6
+    });
+    
+    // adicionar um Listener ao Mapa, para ajustar os valores de raio e maxIntensity quando o zoom muda
+    map.addListener('zoom_changed', () => {
+        zoom = map.getZoom();
+        var radius = 3.076 + 0.00294182 * Math.pow(2.71828, 0.561249 * (zoom));
+        var maxintensity = 48.9302 + 0.0475174 * Math.pow(2.71828, 0.244225 * (zoom));
+        if (radius < 0) radius = 10;
+        heatmap.set("radius", radius);
+        heatmap.set("maxIntensity", maxintensity);
+    });
 
 }
 
@@ -92,7 +93,7 @@ function displayMarkers() {
     displayFlag = !displayFlag;
 }
 
-function CenterControl(controlDiv, map) {
+function CenterControl(controlDiv) {
     // Set CSS for the control border.
     const controlUI = document.createElement("div");
     controlUI.style.backgroundColor = "#fff";
