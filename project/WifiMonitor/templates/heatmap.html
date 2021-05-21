@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>***REMOVED***</title>
     <link rel="shortcut icon" href="/static/images/logo/logoTitle.png" type="image/x-icon">
-    
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
@@ -17,11 +17,11 @@
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    
+
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-	
-    <script type = "text/javascript">
+
+    <script type="text/javascript">
         var heatmapData = JSON.parse("{{data|escapejs}}");
     </script>
     <script src="../static/js/heatmap.js"></script>
@@ -92,54 +92,60 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3">
-                        <!-- Timelapse -->
-                        <div class="card">
-                            <div class="card-header" style="text-align: center">
-                                <h4>Want to generate an heatmap timelapse?</h4>
-                                <input type="checkbox" value="Show Group 1" onclick="displayMarkers(this,1);">
-                            </div>
-                            <div class="card-body" style="align-self: center">
-                                <!-- Button to launch modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timelapse">
-                                    <i class="fas fa-history" style="color: white; margin-right: 7px"></i>Timelapse
-                                </button>
-                                <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="width: 800px">
-                                        <div class="modal-content">
-                                            <!-- Modal Header-->
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <i data-feather="x"></i>
-                                                </button>
-                                            </div>
-                                            <!-- Modal Body-->
-                                            <div class="modal-body">
-                                                <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
-                                                    <div class="card">
-                                                        <h3 class="card-title" align="center" style="font-size: 18px; margin-right: 12px;">Start Datetime</h3>
-                                                        <input align="center" type="datetime-local" style="margin-right: 12px;"/>
-                                                    </div>
-                                                    <div class="card">
-                                                        <h3 class="card-title" align="center" style="font-size: 18px; margin-left: 12px;">End Datetime</h3>
-                                                        <input align="center" type="datetime-local" style="margin-left: 12px;"/>
-                                                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <!-- Timelapse -->
+                    <div class="card">
+                        <div class="card-header" style="text-align: center">
+                            <h4>Want to generate an heatmap timelapse?</h4>
+                        </div>
+                        <div class="card-body" style="align-self: center">
+                            <!-- Button to launch modal -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#timelapse">
+                                <i class="fas fa-history" style="color: white; margin-right: 7px"></i>Timelapse
+                            </button>
+                            <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle"
+                                style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document"
+                                    style="width: 800px">
+                                    <div class="modal-content">
+                                        <!-- Modal Header-->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i data-feather="x"></i>
+                                            </button>
+                                        </div>
+                                        <!-- Modal Body-->
+                                        <div class="modal-body">
+                                            <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
+                                                <div class="card">
+                                                    <h3 class="card-title" align="center"
+                                                        style="font-size: 18px; margin-right: 12px;">Start Datetime</h3>
+                                                    <input align="center" type="datetime-local"
+                                                        style="margin-right: 12px;" />
+                                                </div>
+                                                <div class="card">
+                                                    <h3 class="card-title" align="center"
+                                                        style="font-size: 18px; margin-left: 12px;">End Datetime</h3>
+                                                    <input align="center" type="datetime-local"
+                                                        style="margin-left: 12px;" />
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Modal Footer-->
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-light-secondary"
-                                                data-bs-dismiss="modal">
-                                                <i class="bx bx-x d-block d-sm-none"></i>
-                                                <span class="d-none d-sm-block">Close</span>
-                                            </button>
-                                            <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                                                <i class="bx bx-check d-block d-sm-none"></i>
-                                                <span class="d-none d-sm-block">Generate</span>
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <!-- Modal Footer-->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Close</span>
+                                        </button>
+                                        <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                                            <i class="bx bx-check d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Generate</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -172,22 +178,24 @@
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
 
-        <hr>
-        <footer>
-            <div class="footer clearfix mb-0 text-muted">
-                <div class="top-pad">
-                    <div class="float-start">
-                        <p>2021 &copy; WiFi Monitor</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Projeto em Engenharia Informática - Grupo 05 - MIECT</p>
-                    </div>
+        </div>
+        </section>
+    </div>
+
+    <hr>
+    <footer>
+        <div class="footer clearfix mb-0 text-muted">
+            <div class="top-pad">
+                <div class="float-start">
+                    <p>2021 &copy; WiFi Monitor</p>
+                </div>
+                <div class="float-end">
+                    <p>Projeto em Engenharia Informática - Grupo 05 - MIECT</p>
                 </div>
             </div>
-        </footer>
+        </div>
+    </footer>
     </div>
     </div>
 
@@ -208,4 +216,5 @@
     </script>
 
 </body>
+
 </html>
