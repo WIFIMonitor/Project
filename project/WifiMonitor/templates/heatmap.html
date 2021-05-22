@@ -17,7 +17,7 @@
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-
+    <script src="../static/js/html2canvas.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 
@@ -100,6 +100,7 @@
                             <h4>Want to generate an heatmap timelapse?</h4>
                         </div>
                         <div class="card-body" style="align-self: center">
+                            <button onclick="timelapse()">Imagem do Mapa</button>
                             <!-- Button to launch modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#timelapse">
@@ -203,18 +204,6 @@
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/main.js"></script>
-
-    <!-- Get Buildings to the multi select element -->
-    <script type="text/javascript">
-        {#const multiSelect = document.querySelector('.multi_select');#}
-        {#let building = "";#}
-        {#for(let i = 1; i <= 10; i++) {#}
-            {#    building += `<option class="building">${i}</option>`;#}
-            {#    multiSelect.innerHTML = building;#}
-            {#}#
-        }
-    </script>
-
 </body>
 
 </html>

@@ -72,7 +72,6 @@ function loadMap() {
         heatmap.set("radius", radius);
         heatmap.set("maxIntensity", maxintensity);
     });
-
 }
 
 // Sets the map on all markers in the array.
@@ -122,3 +121,13 @@ function CenterControl(controlDiv) {
     });
 }
 
+// Function to create image based on the google maps heatmap
+function timelapse() {
+    html2canvas(document.querySelector("#map"), {
+        useCORS: true,
+        scale: 0.5,
+    }).then(canvas => {
+        var image = canvas.toDataURL("image/jpeg",0.5).replace("image/jpeg", "image/octet-stream");
+        window.location.href = image;
+    });
+}
