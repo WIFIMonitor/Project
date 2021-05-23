@@ -15,7 +15,7 @@ prev_id = 0
 # load ap cooordinates into memory, so that we dont 
 # have to read the excel file every time someone
 # wants to check the heatmap
-def load_ap_coords():
+def load_people_conected():
     # subtract from the last value, the last 15 minutes
     sq = "select id,clientsCount from clientsCount where time >= \'"+lastValueTS[0][0]+"\'-15m"
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
@@ -44,13 +44,16 @@ def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
-    ap_coordinates = load_ap_coords()
+    if(request.method=='POST'):
+        generateTimelapse(request)
+
+    ap_coordinates = load_people_conected()
     params = {
-    'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
-    'data' : json.dumps(ap_coordinates),
-    'time' : timestamp
-    }
-    
+        'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
+        'data' : json.dumps(ap_coordinates),
+        'time' : timestamp,
+        }
+
     return render(request, 'heatmap.html', params)
 
 def overview(request):
@@ -179,4 +182,13 @@ def get_building_lastday_population():
 
     return count
 
-#get_building_names()
+def generateTimelapse(request):
+    if request.method == 'POST':
+        print("post")
+        
+        datef = request.POST['datef']
+        datet = request.POST['datet']
+
+        print("data inicio: " ,datef," data fim: ",datet)
+    
+    return 0

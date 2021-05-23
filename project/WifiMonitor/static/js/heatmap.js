@@ -1,6 +1,7 @@
 var dados = [];
 let markersArray = [];
 let map;
+let timelapseMap;
 let displayFlag = true;
 function loadMap() {
 
@@ -118,16 +119,5 @@ function CenterControl(controlDiv) {
     // Setup the click event listeners: simply set the map to Chicago.
     controlUI.addEventListener("click", () => {
         displayMarkers();
-    });
-}
-
-// Function to create image based on the google maps heatmap
-function timelapse() {
-    html2canvas(document.querySelector("#map"), {
-        useCORS: true,
-        scale: 0.5,
-    }).then(canvas => {
-        var image = canvas.toDataURL("image/jpeg",0.5).replace("image/jpeg", "image/octet-stream");
-        window.location.href = image;
     });
 }
