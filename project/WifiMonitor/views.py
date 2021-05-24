@@ -2,6 +2,9 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
 import json
+from datetime import datetime
+from .forms import DateForm
+from .models import TimelapseModel
 
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
@@ -44,14 +47,25 @@ def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
+    form = DateForm(request.POST or None)
     if(request.method=='POST'):
-        generateTimelapse(request)
+        if form.is_valid():
+            start = form.cleaned_data.get('start')
+            end = form.cleaned_data.get('end')
+            
+            utc_time = datetime.strptime(str(start), "%Y-%m-%d")
+            epoch_time = (utc_time - datetime(1970, 1, 1)).total_seconds()
+            print(epoch_time)
+            print("start: ", start)
+            print("end: ",end)
+    
 
     ap_coordinates = load_people_conected()
     params = {
         'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
         'data' : json.dumps(ap_coordinates),
         'time' : timestamp,
+        'form' : form
         }
 
     return render(request, 'heatmap.html', params)

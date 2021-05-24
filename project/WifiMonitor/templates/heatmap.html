@@ -108,15 +108,15 @@
                                                 <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
                                                 <!-- start timelapse field -->
                                                 </br>
-                                                <form action="" method="post">
-                                                    {% csrf_token %}
-                                                    <input type="date" name="datef" >
-                                                    <label>
-                                                        <h4>To</h4>
-                                                    </label>
-                                                    <input type="date" name="datet" >
-                                                    <input type="submit" value="Generate">
-                                                </form>
+                                                
+<form action="" method="post">{% csrf_token %}
+    <label for="id_xfrom">From</label>
+    {{form.start}}
+
+    <label for="id_to">to</label>
+    {{form.end}}
+    <button type='submit'>Submit</button>
+</form>
                                             </div>
                                         </div>
                                     </div>
