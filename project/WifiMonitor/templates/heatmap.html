@@ -106,16 +106,36 @@
                                             <!-- Modal Header-->
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
-                                                <!-- start timelapse field -->
-                                                </br>
-                                                <form action="" method="post">{% csrf_token %}
-                                                    <label for="id_xfrom">From</label>
-                                                    {{form.start}}
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i data-feather="x"></i>
+                                                </button>
+                                            </div>
+                                            <!-- Modal Body-->
+                                            <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
+                                                <div class="card" style="margin-left: 25px; margin-top: 10px;">
+                                                     <form action="" method="post">{% csrf_token %}
+                                                        <label for="id_xfrom">From</label>
+                                                        {{form.start}}
+                                                     </form>
+                                                </div>
 
-                                                    <label for="id_to">to</label>
-                                                    {{form.end}}
-                                                    <button type='submit'>Submit</button>
-                                                </form>
+                                                <div class="card" style="margin-top: 10px;">
+                                                     <form action="" method="post">{% csrf_token %}
+                                                        <label for="id_to">to</label>
+                                                        {{form.end}}
+                                                     </form>
+                                                </div>
+                                            </div>
+                                            <!-- Modal Footer-->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                                    <span class="d-none d-sm-block">Close</span>
+                                                </button>
+                                                <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                                    <span class="d-none d-sm-block">Submit</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
