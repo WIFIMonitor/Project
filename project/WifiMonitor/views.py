@@ -5,6 +5,8 @@ import plotly.express as px
 import json
 from datetime import datetime
 from .forms import DateForm,IntentionForm
+from .models import Departments
+from django.db.models import F,Sum
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
@@ -104,22 +106,31 @@ def heatmap(request):
             end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
             
             #generate timelapse graph
-            print(start_time)
             generateTimelapse(start_time,end_time)
 
         if intent_form.is_valid():
-            depart = intent_form.cleaned_data.get('departs')
-            print("departamento: ",depart)
+            try:
+                depart = intent_form.cleaned_data.get('departs')
+                # get people at the specified department
+                people_at = Departments.objects.get(name=depart)
+                # add 1
+                people_at.people = F('people')+1
+                #save
+                people_at.save()
+            except:
+                print("Invalid choice")
 
     latestTS = get_last_ts()
     ap_values = get_heatmap_dictionary(latestTS)
+    people_going_to_campus = Departments.objects.aggregate(Sum('people'))['people__sum']
     params = {
         'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
         'data': json.dumps(ap_values),
         'time': timestamp,
         'date_form': date_form,
         'intent_form': intent_form,
-        'buildings': get_building_names()
+        'buildings': get_building_names(),
+        'people_going': people_going_to_campus,
         }
 
     return render(request, 'heatmap.html', params)

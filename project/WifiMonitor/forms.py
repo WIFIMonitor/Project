@@ -9,5 +9,5 @@ class DateForm(forms.Form):
      end = forms.DateField(widget=DateInput)
 
 class IntentionForm(forms.Form):
-    departs = forms.ModelChoiceField(queryset=Departments.objects.all().order_by('name'),label="",required=False)
+    departs = forms.ModelChoiceField(queryset=Departments.objects.all().order_by('name'),label="",required=False,empty_label="Departamento")
 

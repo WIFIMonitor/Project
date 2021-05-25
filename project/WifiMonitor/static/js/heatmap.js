@@ -10,7 +10,7 @@ function loadMap() {
 
     // create the map
     map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 16,
+        zoom: 17,
         center: {lat: 40.63129560, lng: -8.65810583},
         mapTypeId: "satellite",
     });
@@ -59,8 +59,8 @@ function loadMap() {
     heatmap = new google.maps.visualization.HeatmapLayer({
         data: dados,
         map: map,
-        maxIntensity: 70,
-        radius: 25,
+        maxIntensity: 80,
+        radius: 50,
         opacity: 0.6
     });
     
