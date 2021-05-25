@@ -4,7 +4,7 @@ from influxdb import InfluxDBClient
 import plotly.express as px
 import json
 from datetime import datetime
-from .forms import DateForm
+from .forms import DateForm,IntentionForm
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
@@ -92,17 +92,24 @@ def index(request):
     return render(request, 'index.html')
 
 def heatmap(request):
-    form = DateForm(request.POST or None)
+    date_form = DateForm(request.POST or None)
+    intent_form = IntentionForm(request.POST or None)
+
     if(request.method=='POST'):
-        if form.is_valid():
-            start = form.cleaned_data.get('start')
-            end = form.cleaned_data.get('end')
+        if date_form.is_valid():
+            start = date_form.cleaned_data.get('start')
+            end = date_form.cleaned_data.get('end')
             
             start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
             end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
             
             #generate timelapse graph
+            print(start_time)
             generateTimelapse(start_time,end_time)
+
+        if intent_form.is_valid():
+            depart = intent_form.cleaned_data.get('departs')
+            print("departamento: ",depart)
 
     latestTS = get_last_ts()
     ap_values = get_heatmap_dictionary(latestTS)
@@ -110,7 +117,8 @@ def heatmap(request):
         'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
         'data': json.dumps(ap_values),
         'time': timestamp,
-        'form': form,
+        'date_form': date_form,
+        'intent_form': intent_form,
         'buildings': get_building_names()
         }
 

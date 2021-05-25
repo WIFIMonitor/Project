@@ -92,78 +92,79 @@
                 <div class="col-12 col-lg-3">
                     <!-- Timelapse -->
                     <div class="card">
-                            <div class="card-header" style="text-align: center">
-                                <h4>Want to generate an heatmap timelapse?</h4>
-                            </div>
-                            <div class="card-body" style="align-self: center">
-                                <!-- Button to launch modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timelapse">
-                                    <i class="fas fa-history" style="color: white; margin-right: 7px"></i>Timelapse
-                                </button>
-                                <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="width: 800px">
-                                        <div class="modal-content">
-                                            <!-- Modal Header-->
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <i data-feather="x"></i>
-                                                </button>
-                                            </div>
-                                            <!-- Modal Body-->
+                        <div class="card-header" style="text-align: center">
+                            <h4>Want to generate an heatmap timelapse?</h4>
+                        </div>
+                        <div class="card-body" style="align-self: center">
+                            <!-- Button to launch modal -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#timelapse">
+                                <i class="fas fa-history" style="color: white; margin-right: 7px"></i>Timelapse
+                            </button>
+                            <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle"
+                                style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document"
+                                    style="width: 800px">
+                                    <div class="modal-content">
+                                        <!-- Modal Header-->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="timelapseTitle">Timelapse Options</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i data-feather="x"></i>
+                                            </button>
+                                        </div>
+                                        <!-- Modal Body-->
+                                        <form action="" method="post">{% csrf_token %}
                                             <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
                                                 <div class="card" style="margin-left: 25px; margin-top: 10px;">
-                                                     <form action="" method="post">{% csrf_token %}
-                                                        <label for="id_xfrom">From</label>
-                                                        {{form.start}}
-                                                     </form>
+                                                    <label for="id_xfrom">From</label>
+                                                    {{date_form.start}}
                                                 </div>
 
                                                 <div class="card" style="margin-top: 10px;">
-                                                     <form action="" method="post">{% csrf_token %}
-                                                        <label for="id_to">To</label>
-                                                        {{form.end}}
-                                                     </form>
+                                                    <label for="id_to">To</label>
+                                                    {{date_form.end}}
                                                 </div>
                                             </div>
                                             <!-- Modal Footer-->
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                                <button type="button" class="btn btn-light-secondary"
+                                                    data-bs-dismiss="modal">
                                                     <span class="d-none d-sm-block">Close</span>
                                                 </button>
-                                                <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                                <button type="submit" class="btn btn-primary ml-1">
                                                     <span class="d-none d-sm-block">Submit</span>
                                                 </button>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    <!-- Thinking of going to campus ?-->
-                    <div class="card">
-                        <div class="card-header" style="text-align: center">
-                            <h4>Thinking of going to campus?</h4>
-                        </div>
-                        <div class="card-body" style="align-self: center">
-                            <div class="card-group">
-                                <div class="card" style="padding-right: 20px">
-                                    <button type="button" class="btn btn-primary"
-                                        style="height: 35px; width: 60px">Yes</button>
-                                </div>
-                                <div class="card" style="padding-right: 10px;">
-                                    <div class="multi_select_box">
-                                        <select class="multi_select" style="height: 35px">
-                                            <option class="building"></option>
-                                        </select>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <form action="" method="post">{% csrf_token %}
+                        <!-- Thinking of going to campus ?-->
+                        <div class="card">
+                            <div class="card-header" style="text-align: center">
+                                <h4>Thinking of going to campus?</h4>
+                            </div>
+                            <div class="card-body" style="align-self: center">
+                                <div class="card-group">
+                                    <div class="card" style="padding-right: 20px">
+                                        <button type="submit" class="btn btn-primary"
+                                            style="height: 30px; width: 60px">Yes</button>
+                                    </div>
+                                    <div class="card" style="padding-right: 10px;">
+                                        <div class="multi_select_box" style="height:30px">
+                                            {{intent_form}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
         </div>
     </div>
@@ -191,17 +192,6 @@
     <script src="/static/js/main.js"></script>
     <script src="../static/js/heatmap.js"></script>
 
-    <!-- Get Buildings to the multi select element -->
-    <script type="text/javascript">
-        var buildings = {{buildings|safe}}
-
-        const multiSelect = document.querySelector('.multi_select');
-        let building = "";
-        for (let i = 0; i < buildings.length; i++){
-            building += `<option class="building">${buildings[i]}</option>`;
-            multiSelect.innerHTML = building;
-        }
-    </script>
 </body>
 
 </html>

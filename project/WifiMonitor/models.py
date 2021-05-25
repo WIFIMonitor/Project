@@ -1,7 +1,9 @@
 from django.db import models
-from .forms import DateInput
 # Create your models here.
 
-class TimelapseModel(models.Model):
-    start = models.DateField(DateInput)
-    end = models.DateField(DateInput)
+class Departments(models.Model):
+    name = models.CharField(max_length=30)
+    people = models.IntegerField()
+    
+    def __str__(self):
+        return self.name
