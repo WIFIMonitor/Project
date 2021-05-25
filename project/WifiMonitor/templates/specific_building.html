@@ -81,7 +81,10 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>Distribution through buildings</h4>
-                                        <form method="post" action="{% url 'specific_building' %}">
+                                    </div>
+
+                                    <div class="card-body">
+                                        <form method="post" action="{% url 'specific_building' %}" style="text-align: center; margin-bottom: 25px">
                                             {% csrf_token %}
                                             <select class="" id = "sel" name = "buildSelect"  onchange="changeBuildingURL()" searchable="Search here.." >
                                                 <option value="" disabled selected>{{ default_message}}</option>
@@ -90,10 +93,9 @@
                                                {% endfor %}
                                             </select>
                                             <input id ="submitIn" type="hidden" name="myinput" value="0" />
+                                            {{date_form}}
                                         </form>
-                                    </div>
 
-                                    <div class="card-body">
                                         <div id="container" style="width: 100%; align-items: center">
                                             <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
                                         </div>

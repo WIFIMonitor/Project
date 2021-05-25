@@ -173,6 +173,9 @@ def population_building_graph(request):
 def specific_building(request, building=None):
     global prev_id
     buildings = dict(enumerate(get_building_names()))
+
+    date_form = DateForm(request.POST or None)
+
     #print(buildings)
     if request.method == "GET":  # carregar a pag
         id = 0
@@ -189,7 +192,8 @@ def specific_building(request, building=None):
     tparams = {
         'buildings': buildings,
         'default_message': building_name,
-        'time':timestamp
+        'time': timestamp,
+        'date_form': date_form
     }
     return render(request, 'specific_building.html', tparams)
 
