@@ -93,10 +93,8 @@
                                         </form>
                                     </div>
 
-                                    <div class="col-12 col-lg-9">
-                                        <div id="container" style="width: 100%;">
-                                            <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
-                                        </div>
+                                    <div id="container" style="width: 100%; align-items: center">
+                                        <canvas id="myGraph" data-url="{% url 'line_graph' %}" style="margin: 15px"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +137,6 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
-
     <script src="/static/js/calendar.js"></script>
     <script src="/static/js/calendar_b.js"></script>
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -155,8 +152,8 @@
       var array = path.split("/");
       var building = array[2];
       console.log(building);
-      if(building == ""){
 
+      if(building == ""){
       }else{
           $.ajax({
         url: $myGraph.data("url") + building,
@@ -176,7 +173,6 @@
                 }]
             },
 
-
               options: {
                   responsive: true,
                   interaction: {
@@ -187,27 +183,17 @@
                   plugins: {
                       title: {
                           display: true,
-                          text: 'building'
+                          text: building
                       }
                   },
               }
-
-
-
           });
-
         }
       });
       }
-
-
     });
   </script>
-
-
     <script src="assets/vendors/apexcharts/apexcharts.js"></script>
     <script src="assets/js/pages/dashboard.js"></script>
-
-
 </body>
 </html>
