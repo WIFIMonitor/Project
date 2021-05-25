@@ -49,9 +49,6 @@
                                 <li class="submenu-item ">
                                     <a href="/overview" style="color: white">Overview</a>
                                 </li>
-{#                                 <li class="submenu-item ">#}
-{#                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
-{#                                </li>#}
                                 <li class="submenu-item ">
                                     <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
@@ -71,82 +68,97 @@
 
             <div class="page-heading">
                 <h3>Overview {{time|safe}}</h3>
-                <br>
-                <h5>In the future this page will present several statistics regarding the UA WiFi network.</h5>
-                <h5></h5>
             </div>
 
             <div class="page-content">
                 <section class="row">
-                    <div class="col-12 col-lg-9">
-                        <div class="row">
-                            <div class="col-6 col-lg-3 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="stats-icon purple">
-                                                    <i class="iconly-boldShow"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Total People in UA network</h6>
-                                                <h6 class="font-extrabold mb-0">{{ people_count }}</h6>
+                    <div class="row">
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon purple">
+                                                <i class="iconly-boldShow"></i>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-3 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="stats-icon blue">
-                                                    <i class="iconly-boldProfile"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">People in Campus</h6>
-                                                <h6 class="font-extrabold mb-0">{{ campus_people_count }}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-3 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="stats-icon green">
-                                                    <i class="iconly-boldAdd-User"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">People in Residentials</h6>
-                                                <h6 class="font-extrabold mb-0">{{ residentials_people_count }}</h6>
-                                            </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Total People in UA network</h6>
+                                            <h6 class="font-extrabold mb-0">{{ people_count }}</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Distribution through buildings</h4>
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon blue">
+                                                <i class="iconly-boldProfile"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">People in Campus</h6>
+                                            <h6 class="font-extrabold mb-0">{{ campus_people_count }}</h6>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon green">
+                                                <i class="iconly-boldAdd-User"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">People in Residentials</h6>
+                                            <h6 class="font-extrabold mb-0">{{ residentials_people_count }}</h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Distribution through buildings</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Users distribution per month</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="users_per_month" data-url="{% url 'users_per_month' %}"></canvas>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Users distribution per week</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="users_per_week" data-url="{% url 'users_per_week' %}"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
 
@@ -175,42 +187,109 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
     <script>
-     $(function () {
+        $(function () {
+            var $myGraph = $("#population_building_graph");
 
-      var $myGraph = $("#population_building_graph");
-      $.ajax({
-        url: $myGraph.data("url"),
-        success: function (data) {
+            $.ajax({
+                url: $myGraph.data("url"),
 
-          var ctx = $myGraph[0].getContext("2d");
+                success: function (data) {
+                    var ctx = $myGraph[0].getContext("2d");
 
-          new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: data.labels,
-              datasets: [{
-                label: 'Population',
-                backgroundColor: 'blue',
-                data: data.data
-              }]
-            },
-            options: {
-              responsive: true,
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: 'Population Bar Chart'
-              }
-            }
-          });
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: { labels: data.labels,
+                                    datasets: [{ label: 'Population',
+                                                 backgroundColor: 'blue',
+                                                 data: data.data}]
+                                  },
+                            options: { responsive: true,
+                                       legend: { position: 'top', },
+                                       title: { display: true,
+                                                text: 'Population Bar Chart' }
+                                     }
+                        });
+                }
+            });
+        });
+    </script>
 
-        }
-      });
+    <script>
+        $(function () {
+            var $myGraph = $("#users_per_month");
 
-    });
-  </script>
+            $.ajax({
+                url: $myGraph.data("url"),
+                success: function (data) {
+                    var ctx = $myGraph[0].getContext("2d");
 
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: data.data,
+                                borderColor: 'blue'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            stacked: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Users per month"
+                                }
+                            },
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            var $myGraph = $("#users_per_week");
+
+            $.ajax({
+                url: $myGraph.data("url"),
+                success: function (data) {
+                    var ctx = $myGraph[0].getContext("2d");
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: data.data,
+                                borderColor: 'blue'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            stacked: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Users per month"
+                                }
+                            },
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

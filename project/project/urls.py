@@ -21,6 +21,8 @@ from WifiMonitor import views
 urlpatterns = [
     #path('', views.index, name='index'),
     path('population_building_graph/', views.population_building_graph, name='population_building_graph'),
+    path('users_per_month/', views.users_per_month, name='users_per_month'),
+    path('users_per_week/', views.users_per_week, name='users_per_week'),
     path('overview/', views.overview, name='overview'),
     path('test/',views.test, name='test'),
     path('specific_building/', views.specific_building, name='specific_building'),

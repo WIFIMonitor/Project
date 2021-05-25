@@ -7,6 +7,7 @@ from datetime import datetime
 from .forms import DateForm,IntentionForm
 from .models import Departments
 from django.db.models import F,Sum
+from numpy import random
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
@@ -206,13 +207,32 @@ def line_graph(request, building = None):
     data = []
 
     for sample in values:
-        labels.append(sample[0][sample[0].find('T')+1 : -4])
+        labels.append(sample[0][sample[0].find('T')+1: -4])
         data.append(sample[1])
 
 
     return JsonResponse(data={
         'labels': labels,
         'data': data,
+    })
+
+def users_per_month(request):
+    return JsonResponse(data={
+        'labels': ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                   "November", "December"],
+        'data': [2020, 3050, 2500, 4050, 6230, 5022, 3035, 3210, 2080, 3090, 4020, 3272],
+    })
+
+def users_per_week(request):
+    lst = []
+    data = []
+    for i in range(1, 54):
+        lst.append(i)
+        data.append(random.randint(1000))
+
+    return JsonResponse(data={
+        'labels': lst,
+        'data': data
     })
 
 def get_buildings_count():
