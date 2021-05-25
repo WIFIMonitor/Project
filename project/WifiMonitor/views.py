@@ -108,9 +108,10 @@ def heatmap(request):
     ap_values = get_heatmap_dictionary(latestTS)
     params = {
         'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
-        'data' : json.dumps(ap_values),
-        'time' : timestamp,
-        'form' : form
+        'data': json.dumps(ap_values),
+        'time': timestamp,
+        'form': form,
+        'buildings': get_building_names()
         }
 
     return render(request, 'heatmap.html', params)
