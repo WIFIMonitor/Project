@@ -31,4 +31,9 @@ urlpatterns = [
     path('line_graph/', views.line_graph, name='line_graph'),
     path('', views.heatmap, name='heatmap'),
     path('campus_distribution/', views.campus_distribution, name='campus_distribution'),
+    #paths for monthly users graphs
+    path('specific_building_monthly_users/', views.specific_building_monthly_users, name='specific_building_monthly_users'),
+    path('specific_building_monthly_users/<str:building>/', views.specific_building_monthly_users, name='specific_building_monthly_users'),
+    path('line_graph_monthly_users/<str:building>/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
+    path('line_graph_monthly_users/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
 ]

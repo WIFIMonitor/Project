@@ -18,9 +18,9 @@ def get_last_ts():
     return client.query("select last(clientsCount) from clientsCount").raw['series'][0]['values'][0][0]
 
 # Get the date of the measures being displayed
-timestamp = "Dia: "+get_last_ts().replace("T"," às ")[:-8]
+timestamp = "from day: "+get_last_ts().replace("T"," at ")[:-8]
 
-# load ap cooordinates into memory, so that we dont 
+# load ap cooordinates into memory, so that we dont
 # have to read the excel file every time someone
 # wants to check the heatmap
 def load_ap_coords():
@@ -29,13 +29,13 @@ def load_ap_coords():
 
     for line in f:
         info = line.split(",")
-        dic = { 
+        dic = {
         "lat" : info[1],
         "lon" : info[2].strip('\n'),
         "piso" : info[3] if info[3]!="None\n" else "Não Definido",
         }
         coords[info[0]] = dic
-    
+
     f.close()
     return coords
 
@@ -43,13 +43,13 @@ coords = load_ap_coords()
 
 def get_timelapse_dictionary(dataset,endtime,starttime,measure):
     # query values between last measurement, minus 15 minutes
-    sq = "select id,clientsCount from clientsCount where time <=\'"+starttime+"m and time > \'" +endtime+"m" 
+    sq = "select id,clientsCount from clientsCount where time <=\'"+starttime+"m and time > \'" +endtime+"m"
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
     except:
         return
-   
+
     for line in people_count:
         # only add to the timelapse points that have people conected, to not overload the array
         if line[2] != 0:
@@ -60,7 +60,7 @@ def get_timelapse_dictionary(dataset,endtime,starttime,measure):
                         "piso":coords[line[1]]["piso"],
                         "people":line[2],
                         "measure":measure,
-                        }     
+                        }
                 dataset.append(dic)
             else:
                 continue
@@ -69,7 +69,7 @@ def get_heatmap_dictionary():
     latestTS = get_last_ts()
     dataset = []
     # query values between last measurement, minus 15 minutes
-    sq = "select id,clientsCount from clientsCount where time >=\'"+latestTS+"\' -15m" 
+    sq = "select id,clientsCount from clientsCount where time >=\'"+latestTS+"\' -15m"
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
@@ -84,14 +84,14 @@ def get_heatmap_dictionary():
                         "lon":coords[line[1]]["lon"],
                         "piso":coords[line[1]]["piso"],
                         "people":line[2],
-                        }     
+                        }
                 dataset.append(dic)
             else:
                 continue
 
     return dataset
 
- 
+
 def index(request):
     return render(request, 'index.html')
 
@@ -105,10 +105,10 @@ def heatmap(request):
             if date_form.is_valid():
                 start = date_form.cleaned_data.get('start')
                 end = date_form.cleaned_data.get('end')
-            
+
                 start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
                 end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
-            
+
                 #generate timelapse graph
                 generateTimelapse(start_time,end_time)
 
@@ -191,6 +191,33 @@ def specific_building(request, building=None):
     }
     return render(request, 'specific_building.html', tparams)
 
+def specific_building_monthly_users(request, building=None):
+    global prev_id
+    buildings = dict(enumerate(get_building_names()))
+
+    date_form = DateForm(request.POST or None)
+
+    #print(buildings)
+    if request.method == "GET":  # carregar a pag
+        id = 0
+        building_name = "Choose your building"
+
+    if request.method == "POST":
+        id = request.POST["buildSelect"]
+        building_name = buildings[int(id)]
+
+    if (prev_id == id):
+        building_name = "Choose your building"
+
+    prev_id = id
+    tparams = {
+        'buildings': buildings,
+        'default_message': building_name,
+        'time': timestamp,
+        'date_form': date_form
+    }
+    return render(request, 'specific_building_monthly_users.html', tparams)
+
 def line_graph(request, building = None):
     latestTS = get_last_ts()
     building = str(building)
@@ -204,6 +231,23 @@ def line_graph(request, building = None):
         labels.append(sample[0][sample[0].find('T')+1: -4])
         data.append(sample[1])
 
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+def line_graph_monthly_users(request, building = None):
+    latestTS = get_last_ts()   #vai buscar o último timestamp da base de dados
+    if(building != None):
+        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(24h)").raw['series'][0]["values"]
+    print(values)
+    labels = []
+    data = []
+
+    for sample in values:
+        labels.append(sample[0][sample[0].find('202')+5: -10])
+        data.append(sample[1])
 
     return JsonResponse(data={
         'labels': labels,

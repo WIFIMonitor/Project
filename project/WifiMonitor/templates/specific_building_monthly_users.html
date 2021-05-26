@@ -10,11 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
-    <link rel="stylesheet" href="/static/vendors/iconly/bold.css">
     <link rel="stylesheet" href="/static/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="/static/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/app.css">
-    <link rel="stylesheet" href="/static/css/ourStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 </head>
 
@@ -49,9 +47,9 @@
                                 <li class="submenu-item ">
                                     <a href="/overview" style="color: white">Overview</a>
                                 </li>
-                                 <li class="submenu-item ">
-                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>
-                                </li>
+{#                                 <li class="submenu-item ">#}
+{#                                    <a href="/campus_distribution" style="color: white">Campus Distribution</a>#}
+{#                                </li>#}
                                 <li class="submenu-item ">
                                     <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
@@ -73,7 +71,7 @@
             </header>
 
             <div class="page-heading">
-                <h3>Campus Distribition</h3>
+                <h3>Building Statistics {{time|safe}}</h3>
                 <br>
                 <h5></h5>
             </div>
@@ -81,22 +79,34 @@
             <div class="page-content">
                 <section class="row">
                     <div class="col-12 col-lg-9">
-
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>Distribution through buildings</h4>
                                     </div>
+
                                     <div class="card-body">
-                                        <canvas id="population_building_graph" data-url="{% url 'population_building_graph' %}"></canvas>
+                                        <form method="post" action="{% url 'specific_building' %}" style="text-align: center; margin-bottom: 25px">
+                                            {% csrf_token %}
+                                            <select class="" id = "sel" name = "buildSelect"  onchange="changeBuildingURL()" searchable="Search here.." >
+                                                <option value="" disabled selected>{{ default_message}}</option>
+                                                {% for id,name in buildings.items %}
+                                                    <option value={{ name }}>{{ name }}</option>
+                                               {% endfor %}
+                                            </select>
+                                            <input id ="submitIn" type="hidden" name="myinput" value="0" />
+                                            {{date_form}}
+                                        </form>
+
+                                        <div id="container" style="width: 100%; align-items: center">
+                                            <canvas id="myGraph" data-url="{% url 'line_graph_monthly_users' %}"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </section>
             </div>
 
@@ -116,51 +126,81 @@
         </div>
     </div>
 
+
+    <script>
+        function submit(){ // trigger action
+            document.getElementById("submitIn").value = "1";
+        }
+    </script>
+    <script>
+    function changeBuildingURL() {
+        var e = document.getElementById("sel");
+        var strUser = e.value;
+        {#var x = document.getElementById("sel").value;#}
+        {#document.getElementById("demo").innerHTML = "You selected: " + x;#}
+        window.location = "http://127.0.0.1:8000/specific_building_monthly_users/" + strUser;
+    }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+    <script src="/static/js/calendar.js"></script>
+    <script src="/static/js/calendar_b.js"></script>
     <script src="/static/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/vendors/apexcharts/apexcharts.js"></script>
-    <script src="/static/js/pages/dashboard.js"></script>
     <script src="/static/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
     <script>
      $(function () {
 
-      var $myGraph = $("#population_building_graph");
-      $.ajax({
-        url: $myGraph.data("url"),
+      var $myGraph = $("#myGraph");
+      var path = window.location.pathname;
+      var array = path.split("/");
+      var building = array[2];
+      console.log(building);
+
+      if(building == ""){
+      }else{
+          $.ajax({
+        url: $myGraph.data("url") + building,
+
         success: function (data) {
 
           var ctx = $myGraph[0].getContext("2d");
 
           new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
               labels: data.labels,
               datasets: [{
                 label: 'Population',
-                backgroundColor: 'blue',
+                borderColor: 'red',
                 data: data.data
-              }]
+                }]
             },
-            options: {
-              responsive: true,
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: 'Population Bar Chart'
-              }
-            }
-          });
 
+              options: {
+                  responsive: true,
+                  interaction: {
+                      mode: 'index',
+                      intersect: false,
+                  },
+                  stacked: false,
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: building
+                      }
+                  },
+              }
+          });
         }
       });
-
+      }
     });
   </script>
-
+    <script src="assets/vendors/apexcharts/apexcharts.js"></script>
+    <script src="assets/js/pages/dashboard.js"></script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+{% block content %}
+ {% load static %}
+  <div id="container" style="width: 75%;">
+
+    <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
+
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+
+
+    <script>
+     $(function () {
+
+      var $myGraph = $("#myGraph");
+      $.ajax({
+        url: $myGraph.data("url"),
+        success: function (data) {
+
+          var ctx = $myGraph[0].getContext("2d");
+          console.log(ctx)
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Population',
+                borderColor: 'red',
+                data: data.data
+              }]
+            },
+
+
+              options: {
+                  responsive: true,
+                  interaction: {
+                      mode: 'index',
+                      intersect: false,
+                  },
+                  stacked: false,
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: 'building'
+                      }
+                  },
+              }
+
+
+
+          });
+
+        }
+      });
+
+    });
+
+
+
+
+  </script>
+
+{% endblock %}
