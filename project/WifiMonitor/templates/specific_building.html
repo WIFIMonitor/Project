@@ -97,7 +97,7 @@
                                         </form>
 
                                         <div id="container" style="width: 100%; align-items: center">
-                                            <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
+                                            <canvas id="line_Graph"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -147,22 +147,6 @@
         </div>
     </div>
 
-
-    <script>
-        function submit(){ // trigger action
-            document.getElementById("submitIn").value = "1";
-        }
-    </script>
-    <script>
-    function changeBuildingURL() {
-        var e = document.getElementById("sel");
-        var strUser = e.value;
-        {#var x = document.getElementById("sel").value;#}
-        {#document.getElementById("demo").innerHTML = "You selected: " + x;#}
-        window.location = "http://127.0.0.1:8000/specific_building/" + strUser;
-    }
-    </script>
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
     <script src="/static/js/calendar.js"></script>
@@ -173,53 +157,26 @@
     <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
     <script>
-     $(function () {
-
-      var $myGraph = $("#myGraph");
-      var path = window.location.pathname;
-      var array = path.split("/");
-      var building = array[2];
-      console.log(building);
-
-      if(building == ""){
-      }else{
-          $.ajax({
-        url: $myGraph.data("url") + building,
-
-        success: function (data) {
-
-          var ctx = $myGraph[0].getContext("2d");
-
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: data.labels,
-              datasets: [{
-                label: 'Population',
-                borderColor: 'red',
-                data: data.data
-                }]
-            },
-
-              options: {
-                  responsive: true,
-                  interaction: {
-                      mode: 'index',
-                      intersect: false,
-                  },
-                  stacked: false,
-                  plugins: {
-                      title: {
-                          display: true,
-                          text: building
-                      }
-                  },
-              }
-          });
-        }
-      });
+    var config = {
+      type: 'line',
+      data: {
+        datasets: [{
+          data: {{ dataDist|safe }},
+          label: 'Users Conected',
+          backgroundColor : 'red',
+          borderColor: 'red'
+        }],
+        labels: {{ labelsDist|safe }}
+      },
+      options: {
+        responsive: true
       }
-    });
+    };
+
+    window.onload = function() {
+    var ctx = document.getElementById('line_Graph')
+    window.linechart = new Chart(ctx, config);
+  };
     </script>
 
     <script>

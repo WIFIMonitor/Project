@@ -181,11 +181,13 @@ def population_building_graph(request):
 def specific_building(request, building=None):
     global prev_id
     specific_build_form = SpecificBuildingForm(request.POST or None) 
-    
+    dataDist=[]
+    labelsDist=[]
+
     if(request.method=='POST'):
         if specific_build_form.is_valid():
             building = specific_build_form.cleaned_data.get('departs')
-            line_graph(request,building) 
+            dataDist,labelsDist = line_graph(building) 
 
     prev_id = id
     tparams = {
@@ -193,6 +195,8 @@ def specific_building(request, building=None):
         'default_message': "Building",
         'time': timestamp,
         'specific_building_form': specific_build_form,
+        'dataDist': dataDist,
+        'labelsDist' : labelsDist,
     }
     return render(request, 'specific_building.html', tparams)
 
@@ -223,9 +227,9 @@ def specific_building_monthly_users(request, building=None):
     }
     return render(request, 'specific_building_monthly_users.html', tparams)
 
-def line_graph(request, building = None):
+def line_graph(building = None):
     latestTS = get_last_ts()
-    building = str(building)
+    building = str(building).lower()
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
     print(values)
@@ -237,10 +241,7 @@ def line_graph(request, building = None):
         data.append(sample[1])
 
 
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
+    return data,labels
 
 def line_graph_monthly_users(request, building = None):
     latestTS = get_last_ts()   #vai buscar o último timestamp da base de dados
@@ -331,7 +332,7 @@ def get_building_names():
     buildings = []
 
     for x in res:
-        buildings.append(str(x))
+        buildings.append(str(x).lower())
 
     return buildings
 
