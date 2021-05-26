@@ -11,3 +11,7 @@ class DateForm(forms.Form):
 class IntentionForm(forms.Form):
     departs = forms.ModelChoiceField(queryset=Departments.objects.all().order_by('name'),label="",required=False,empty_label="Departamento")
 
+class SpecificBuildingForm(forms.Form):
+    start = forms.DateField(widget=DateInput)
+    end = forms.DateField(widget=DateInput)
+    departs = forms.ModelChoiceField(queryset=Departments.objects.all().order_by('name'),label="",required=False,empty_label="Departamento")

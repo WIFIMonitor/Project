@@ -4,12 +4,12 @@ from influxdb import InfluxDBClient
 import plotly.express as px
 import json
 from datetime import datetime
-from .forms import DateForm,IntentionForm
+from .forms import DateForm,IntentionForm,SpecificBuildingForm
 from .models import Departments
 from django.db.models import F,Sum
 from numpy import random
 
-client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("localhost", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
 prev_id = 0
 
@@ -133,7 +133,6 @@ def heatmap(request):
         'time': timestamp,
         'date_form': date_form,
         'intent_form': intent_form,
-        'buildings': get_building_names(),
         'people_going': people_going_to_campus,
         }
 
@@ -176,33 +175,25 @@ def population_building_graph(request):
 
 def specific_building(request, building=None):
     global prev_id
-    buildings = dict(enumerate(get_building_names()))
-
-    date_form = DateForm(request.POST or None)
-
-    #print(buildings)
-    if request.method == "GET":  # carregar a pag
-        id = 0
-        building_name = "Choose your building"
-
-    if request.method == "POST":
-        id = request.POST["buildSelect"]
-        building_name = buildings[int(id)]
-
-    if (prev_id == id):
-        building_name = "Choose your building"
+    specific_build_form = SpecificBuildingForm(request.POST or None) 
+    
+    if(request.method=='POST'):
+        if specific_build_form.is_valid():
+            building = specific_build_form.cleaned_data.get('departs')
+            line_graph(request,building) 
 
     prev_id = id
     tparams = {
-        'buildings': buildings,
-        'default_message': building_name,
+        'buildings': "Building",
+        'default_message': "Building",
         'time': timestamp,
-        'date_form': date_form
+        'specific_building_form': specific_build_form,
     }
     return render(request, 'specific_building.html', tparams)
 
 def line_graph(request, building = None):
     latestTS = get_last_ts()
+    building = str(building)
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
     print(values)
@@ -264,6 +255,7 @@ def get_buildings_count():
 def get_building_names():
     res = client.query("show tag values from clientsCount with key = building").raw["series"][0]["values"]
     buildings = []
+
     for x in res:
         buildings.append(x[1])
 

@@ -86,14 +86,11 @@
                                     <div class="card-body">
                                         <form method="post" action="{% url 'specific_building' %}" style="text-align: center; margin-bottom: 25px">
                                             {% csrf_token %}
-                                            <select class="" id = "sel" name = "buildSelect"  onchange="changeBuildingURL()" searchable="Search here.." >
-                                                <option value="" disabled selected>{{ default_message}}</option>
-                                                {% for id,name in buildings.items %}
-                                                    <option value={{ name }}>{{ name }}</option>
-                                               {% endfor %}
-                                            </select>
+                                            {{specific_building_form.departs}}
                                             <input id ="submitIn" type="hidden" name="myinput" value="0" />
-                                            {{date_form}}
+                                            {{specific_building_form.start}}
+                                            {{specific_building_form.end}}
+                                            <button type="submit" class="btn btn-primary ml-1" name="specific_building_submit"> Submit </button>
                                         </form>
 
                                         <div id="container" style="width: 100%; align-items: center">
