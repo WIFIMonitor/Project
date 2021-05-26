@@ -6,7 +6,9 @@ let displayFlag = true;
 function loadMap() {
 
     // criar a janela de informação que é ativada quando se clica num AP
-    const infowindow = new google.maps.InfoWindow({});
+    const infowindow = new google.maps.InfoWindow({
+        maxWidth: 175,
+    });
 
     // create the map
     map = new google.maps.Map(document.getElementById("map"), {
@@ -28,7 +30,7 @@ function loadMap() {
                 url: '/static/images/ap_icon.ico',
                 scaledSize: new google.maps.Size(20, 20)
             },
-            title: "Latitude: " + heatmapData[i].lat + " | Longitude: " + heatmapData[i].lon + " | Pessoas: " + heatmapData[i].people + " | Piso: "+heatmapData[i].piso,
+            title: "<p style='height: 5px'> Latitude: " + heatmapData[i].lat + "</p> <p style='height: 5px'>Longitude: " + heatmapData[i].lon + "</p> <p style='height: 5px'>Pessoas: " + heatmapData[i].people + "</p> <p style='height: 5px'>Piso: "+heatmapData[i].piso+"</p>",
             map: map,
         });
         // colocar o marker escondido por defeito

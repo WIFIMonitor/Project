@@ -1009,11 +1009,11 @@
 }
 
 .sidebar-wrapper .menu .sidebar-item.has-sub .sidebar-link:after {
-	content: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><path stroke="gray" stroke-width="1" d="M6 9l6 6 6-6"/></svg>');
+	content: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><path stroke="white" stroke-width="1" d="M6 9l6 6 6-6"/></svg>');
 	position: absolute;
 	color: #ccc;
 	right: 15px;
-	top: 12px;
+	top: 3px;
 	display: block
 }
 
