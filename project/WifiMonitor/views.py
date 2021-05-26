@@ -9,7 +9,7 @@ from .models import Departments
 from django.db.models import F,Sum
 from numpy import random
 
-client = InfluxDBClient("localhost", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
 prev_id = 0
 
@@ -297,11 +297,12 @@ def get_buildings_count():
     return count
 
 def get_building_names():
-    res = client.query("show tag values from clientsCount with key = building").raw["series"][0]["values"]
+    res = Departments.objects.all().order_by('name')
+    print(res)
     buildings = []
 
     for x in res:
-        buildings.append(x[1])
+        buildings.append(str(x))
 
     return buildings
 
