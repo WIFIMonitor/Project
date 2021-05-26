@@ -16,6 +16,7 @@
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript">
         var heatmapData = JSON.parse("{{data|escapejs}}");
     </script>
@@ -75,6 +76,10 @@
 
         <div class="page-heading">
             <h3 style="margin-bottom: 25px;">Heatmap {{time|safe}}</h3>
+            <div class="container">
+                <div class="box"></div>
+                    <div class="box overlay"></div>
+                </div>
             <section class="row">
                 <div class="col-12 col-lg-9">
                     <div class="row">
@@ -82,6 +87,11 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div id='map' style='height:800px; width:100%;'></div>
+                                    {% if graph %}
+                                    <div>
+                                        {{ graph|safe }}
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

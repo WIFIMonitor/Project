@@ -91,13 +91,10 @@ def get_heatmap_dictionary():
 
     return dataset
 
-
-def index(request):
-    return render(request, 'index.html')
-
 def heatmap(request):
     date_form = DateForm(request.POST or None)
     intent_form = IntentionForm(request.POST or None)
+    graph = None
 
     if(request.method=='POST'):
         # Check whether timelapse or intent form were submitted
@@ -110,7 +107,7 @@ def heatmap(request):
                 end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
 
                 #generate timelapse graph
-                generateTimelapse(start_time,end_time)
+                graph = generateTimelapse(start_time,end_time)
 
         if 'intent_submit' in request.POST:
             if intent_form.is_valid():
@@ -134,6 +131,7 @@ def heatmap(request):
         'date_form': date_form,
         'intent_form': intent_form,
         'people_going': people_going_to_campus,
+        'graph': graph
         }
 
     return render(request, 'heatmap.html', params)
@@ -176,9 +174,6 @@ def overview(request):
 
 def campus_distribution(request):
     return render(request, 'campus_distribution.html')
-
-def test(request):
-    return render(request, 'line_graph.html')
 
 def population_building_graph():
     count = get_buildings_count()
@@ -352,8 +347,8 @@ def get_building_lastday_population():
 def generateTimelapse(start_time,end_time):
     dataset = []
     latestTS = get_last_ts()
-    # Generate 50 timelaspes. In the future it will be decided by the user input
-    for x in range(1,10):
+    # Generate 10 timelaspes. In the future it will be decided by the user input
+    for x in range(1,5):
         try:
             # since we get values every 15 minutes, we need to now how many 15 minute measures we want
             sub1 = str(15*x)
@@ -367,11 +362,11 @@ def generateTimelapse(start_time,end_time):
             continue
 
     fig = px.density_mapbox(dataset, lat='lat', lon='lon', z='people', radius=10,animation_frame='measure',
-            center=dict(lat=40.63041451444991, lon=-8.65803098047244),
+            center=dict(lat=40.63193066543083, lon=-8.658186691344712),
             zoom=15,
             mapbox_style="stamen-terrain",
-            width=550,
-            height=1100,
+            width=500,
+            height=700,
             color_continuous_scale= [
                     [0.0, "green"],
                     [0.3, "green"],
@@ -381,6 +376,6 @@ def generateTimelapse(start_time,end_time):
                     [1.0, "red"]],
             title= str(latestTS) + "- " + str((x*15)) + "m",
             range_color=(0,30), #max and min values for heatmap
-               )
+            )
 
-    fig.write_html("WifiMonitor/static/slider.html")
+    return fig.to_html(auto_play=False,full_html=False,include_plotlyjs=False,validate=False)

@@ -20,7 +20,6 @@ from WifiMonitor import views
 
 urlpatterns = [
     path('overview/', views.overview, name='overview'),
-    path('test/',views.test, name='test'),
     path('specific_building/', views.specific_building, name='specific_building'),
     path('', views.heatmap, name='heatmap'),
     path('campus_distribution/', views.campus_distribution, name='campus_distribution'),
