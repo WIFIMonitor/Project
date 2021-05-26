@@ -15,9 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&libraries=visualization" async></script>
-    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script type="text/javascript">
         var heatmapData = JSON.parse("{{data|escapejs}}");
     </script>
@@ -133,7 +131,7 @@
                                                     data-bs-dismiss="modal">
                                                     <span class="d-none d-sm-block">Close</span>
                                                 </button>
-                                                <button type="submit" class="btn btn-primary ml-1">
+                                                <button type="submit" class="btn btn-primary ml-1" name="timelapse_submit">
                                                     <span class="d-none d-sm-block">Submit</span>
                                                 </button>
                                             </div>
@@ -154,7 +152,7 @@
                                 <div class="card-group">
                                     <div class="card">
                                         <button type="submit" class="btn btn-primary"
-                                            style="height: 30px; width: 60px">Yes</button>
+                                            style="height: 30px; width: 60px" name="intent_submit">Yes</button>
                                     </div>
                                     <div class="card">
                                         <div class="multi_select_box" style="height:30px">

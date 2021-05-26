@@ -65,10 +65,11 @@ def get_timelapse_dictionary(dataset,endtime,starttime,measure):
             else:
                 continue
 
-def get_heatmap_dictionary(timestamp):
+def get_heatmap_dictionary():
+    latestTS = get_last_ts()
     dataset = []
     # query values between last measurement, minus 15 minutes
-    sq = "select id,clientsCount from clientsCount where time >=\'"+timestamp+"\' -15m" 
+    sq = "select id,clientsCount from clientsCount where time >=\'"+latestTS+"\' -15m" 
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
@@ -99,30 +100,32 @@ def heatmap(request):
     intent_form = IntentionForm(request.POST or None)
 
     if(request.method=='POST'):
-        if date_form.is_valid():
-            start = date_form.cleaned_data.get('start')
-            end = date_form.cleaned_data.get('end')
+        # Check whether timelapse or intent form were submitted
+        if 'timelapse_submit' in request.POST:
+            if date_form.is_valid():
+                start = date_form.cleaned_data.get('start')
+                end = date_form.cleaned_data.get('end')
             
-            start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
-            end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
+                start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
+                end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
             
-            #generate timelapse graph
-            generateTimelapse(start_time,end_time)
+                #generate timelapse graph
+                generateTimelapse(start_time,end_time)
 
-        if intent_form.is_valid():
-            try:
-                depart = intent_form.cleaned_data.get('departs')
-                # get people at the specified department
-                people_at = Departments.objects.get(name=depart)
-                # add 1
-                people_at.people = F('people')+1
-                #save
-                people_at.save()
-            except:
-                print("Invalid choice")
+        if 'intent_submit' in request.POST:
+            if intent_form.is_valid():
+                try:
+                    depart = intent_form.cleaned_data.get('departs')
+                    # get people at the specified department
+                    people_at = Departments.objects.get(name=depart)
+                    # add 1
+                    people_at.people = F('people')+1
+                    #save
+                    people_at.save()
+                except:
+                    print("Invalid choice")
 
-    latestTS = get_last_ts()
-    ap_values = get_heatmap_dictionary(latestTS)
+    ap_values = get_heatmap_dictionary()
     people_going_to_campus = Departments.objects.aggregate(Sum('people'))['people__sum']
     params = {
         'api_key': 'AIzaSyA9M86-1yyuucibiNR-wh8kiboANAcUjuI',
