@@ -986,7 +986,7 @@
 }
 
 .active .sidebar-wrapper {
-	background: #535151;
+	background: #43c6df;
 }
 
 .sidebar-wrapper .menu .sidebar-link i,
@@ -999,7 +999,7 @@
 }
 
 .sidebar-wrapper .menu .sidebar-link:hover {
-	background-color: #b1b1b3
+	background-color: #48b5ff
 }
 
 .sidebar-wrapper .menu .sidebar-item {
@@ -1018,7 +1018,7 @@
 }
 
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
-	background-color: #6f6f72
+	background-color: #268bb3
 }
 
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link span {
