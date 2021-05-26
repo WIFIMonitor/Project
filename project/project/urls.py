@@ -19,23 +19,9 @@ from django.urls import path
 from WifiMonitor import views
 
 urlpatterns = [
-    #path('', views.index, name='index'),
-    path('population_building_graph/', views.population_building_graph, name='population_building_graph'),
-    path('users_per_month/', views.users_per_month, name='users_per_month'),
-    path('users_per_week/', views.users_per_week, name='users_per_week'),
     path('overview/', views.overview, name='overview'),
     path('test/',views.test, name='test'),
     path('specific_building/', views.specific_building, name='specific_building'),
-    path('specific_building/<str:building>/', views.specific_building, name='specific_building'),
-    path('line_graph/<str:building>/', views.line_graph, name='line_graph'),
-    path('line_graph/', views.line_graph, name='line_graph'),
     path('', views.heatmap, name='heatmap'),
     path('campus_distribution/', views.campus_distribution, name='campus_distribution'),
-    #paths for monthly users graphs
-    path('specific_building_monthly_users/', views.specific_building_monthly_users, name='specific_building_monthly_users'),
-    path('specific_building_monthly_users/<str:building>/', views.specific_building_monthly_users, name='specific_building_monthly_users'),
-    path('line_graph_monthly_users/<str:building>/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
-    path('line_graph_monthly_users/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
-    path('downloadChart/', views.downloadChart, name='downloadChart'),
-    path('uploadChart/', views.uploadChart, name='uploadChart'),
 ]

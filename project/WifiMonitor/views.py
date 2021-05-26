@@ -140,6 +140,9 @@ def heatmap(request):
 
 def overview(request):
     latestTS = get_last_ts()
+    labels,data1,data2 = population_building_graph()
+    labelMonth,dataMonth = users_per_month()
+    labelWeek,dataWeek = users_per_week()
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
         residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
@@ -153,7 +156,14 @@ def overview(request):
         'people_count' : people_count,
         'residentials_people_count' : residentials_people_count,
         'campus_people_count' : campus_people_count,
-        'time':timestamp
+        'time':timestamp,
+        'labels': labels,
+        'data1': data1,
+        'data2': data2,
+        'labelMonth' : labelMonth,
+        'labelWeek' : labelWeek,
+        'dataMonth' : dataMonth,
+        'dataWeek' : dataWeek,
     }
     return render(request, 'overview.html', tparams)
 
@@ -163,31 +173,33 @@ def campus_distribution(request):
 def test(request):
     return render(request, 'line_graph.html')
 
-def population_building_graph(request):
+def population_building_graph():
     count = get_buildings_count()
     labels = list(count.keys())
-    data = list(count.values())
+    data1 = list(count.values())
 
     data2 = []
     for i in range(1, 53):
         data2.append(random.randint(25))
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-        'data2': data2,
-    })
+    
+    return labels,data1,data2
 
 def specific_building(request, building=None):
     global prev_id
     specific_build_form = SpecificBuildingForm(request.POST or None) 
     dataDist=[]
     labelsDist=[]
+    labelDownload = []
+    labelUpload = []
+    dataDownload = []
+    dataUpload = []
 
     if(request.method=='POST'):
         if specific_build_form.is_valid():
             building = specific_build_form.cleaned_data.get('departs')
-            dataDist,labelsDist = line_graph(building) 
+            dataDist,labelsDist = line_graph(building)
+            labelDownload,dataDownload = downloadChart()
+            labelUpload,dataUpload = uploadChart()
 
     prev_id = id
     tparams = {
@@ -197,42 +209,18 @@ def specific_building(request, building=None):
         'specific_building_form': specific_build_form,
         'dataDist': dataDist,
         'labelsDist' : labelsDist,
+        'labelDownload' : labelDownload,
+        'dataDownload' : dataDownload,
+        'labelUpload' : labelUpload,
+        'dataUpload': dataUpload,
     }
     return render(request, 'specific_building.html', tparams)
-
-def specific_building_monthly_users(request, building=None):
-    global prev_id
-    buildings = dict(enumerate(get_building_names()))
-
-    date_form = DateForm(request.POST or None)
-
-    #print(buildings)
-    if request.method == "GET":  # carregar a pag
-        id = 0
-        building_name = "Choose your building"
-
-    if request.method == "POST":
-        id = request.POST["buildSelect"]
-        building_name = buildings[int(id)]
-
-    if (prev_id == id):
-        building_name = "Choose your building"
-
-    prev_id = id
-    tparams = {
-        'buildings': buildings,
-        'default_message': building_name,
-        'time': timestamp,
-        'date_form': date_form
-    }
-    return render(request, 'specific_building_monthly_users.html', tparams)
 
 def line_graph(building = None):
     latestTS = get_last_ts()
     building = str(building).lower()
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
-    print(values)
     labels = []
     data = []
 
@@ -243,65 +231,38 @@ def line_graph(building = None):
 
     return data,labels
 
-def line_graph_monthly_users(request, building = None):
-    latestTS = get_last_ts()   #vai buscar o último timestamp da base de dados
-    if(building != None):
-        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(24h)").raw['series'][0]["values"]
-    print(values)
-    labels = []
-    data = []
+def users_per_month():
+    labels=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November", "December"]
+    data=[2020, 3050, 2500, 4050, 6230, 5022, 3035, 3210, 2080, 3090, 4020, 3272]
 
-    for sample in values:
-        labels.append(sample[0][sample[0].find('202')+5: -10])
-        data.append(sample[1])
+    return labels,data
 
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-def users_per_month(request):
-    return JsonResponse(data={
-        'labels': ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-                   "November", "December"],
-        'data': [2020, 3050, 2500, 4050, 6230, 5022, 3035, 3210, 2080, 3090, 4020, 3272],
-    })
-
-def users_per_week(request):
+def users_per_week():
     lst = []
     data = []
     for i in range(1, 54):
         lst.append(i)
         data.append(random.randint(1000))
 
-    return JsonResponse(data={
-        'labels': lst,
-        'data': data
-    })
+    return lst,data
 
-def downloadChart(request):
+def downloadChart():
     aps = []
     data = []
     for i in range(1,11):
         aps.append("AP-"+str(i))
         data.append(random.randint(5000))
 
-    return JsonResponse(data={
-      'labels': aps,
-      'data': data
-    })
+    return aps,data
 
-def uploadChart(request):
+def uploadChart():
     aps = []
     data = []
     for i in range(1, 11):
         aps.append("AP-" + str(i))
         data.append(random.randint(5000))
 
-    return JsonResponse(data={
-        'labels': aps,
-        'data': data
-    })
+    return aps,data
 
 def get_buildings_count():
     latestTS = get_last_ts()

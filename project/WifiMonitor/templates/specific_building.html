@@ -53,9 +53,6 @@
                                 <li class="submenu-item ">
                                     <a href="/specific_building" style="color: white">Building Statistics</a>
                                 </li>
-                                <li class="submenu-item ">
-                                    <a href="/specific_building_monthly_users" style="color: white">Monthly Users</a>
-                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -112,7 +109,7 @@
                                     <h4>APs download bandwidth</h4>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="downloadChart" data-url="{% url 'downloadChart' %}"></canvas>
+                                    <canvas id="downloadChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +120,7 @@
                                     <h4>APs upload bandwidth</h4>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="uploadChart" data-url="{% url 'uploadChart' %}"></canvas>
+                                    <canvas id="uploadChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +154,7 @@
     <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
     <script>
-    var config = {
+    var configLine = {
       type: 'line',
       data: {
         datasets: [{
@@ -172,34 +169,19 @@
         responsive: true
       }
     };
-
-    window.onload = function() {
-    var ctx = document.getElementById('line_Graph')
-    window.linechart = new Chart(ctx, config);
-  };
-    </script>
-
-    <script>
-        $(function () {
-            var $myGraph = $("#downloadChart");
-
-            $.ajax({
-                url: $myGraph.data("url"),
-                success: function (data) {
-                    var ctx = $myGraph[0].getContext("2d");
-
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                label: 'Users',
-                                data: data.data,
-                                backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
-                                borderColor: "white"
-                            }]
-                        },
-                        options: {
+    
+    var configDownload = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ dataDownload|safe }},
+          label: 'Download bandwidth',
+          backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+            borderColor : 'white'
+        }],
+        labels: {{ labelDownload|safe }}
+      },
+                    options: {
                             responsive: true,
                             interaction: {
                                 mode: 'index',
@@ -213,33 +195,20 @@
                                 }
                             },
                         }
-                    });
-                }
-            });
-        });
-    </script>
+    };
 
-    <script>
-        $(function () {
-            var $myGraph = $("#uploadChart");
-
-            $.ajax({
-                url: $myGraph.data("url"),
-                success: function (data) {
-                    var ctx = $myGraph[0].getContext("2d");
-
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                label: 'Users',
-                                data: data.data,
-                                backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
-                                borderColor: "white"
-                            }]
-                        },
-                        options: {
+    var configUpload = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ dataUpload|safe }},
+          label: 'Upload bandwidth',
+          backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+            borderColor : 'white'
+        }],
+        labels: {{ labelUpload|safe }}
+      },
+                    options: {
                             responsive: true,
                             interaction: {
                                 mode: 'index',
@@ -253,11 +222,18 @@
                                 }
                             },
                         }
-                    });
-                }
-            });
-        });
+    };
+
+    window.onload = function() {
+    var ctl = document.getElementById('line_Graph')
+    var ctd = document.getElementById('downloadChart')
+    var ctu = document.getElementById('uploadChart')
+    window.linechart = new Chart(ctl, configLine);
+    window.downloadchart = new Chart(ctd, configDownload);
+    window.uploadchart = new Chart(ctu, configUpload);
+  };
     </script>
+
     <script src="assets/vendors/apexcharts/apexcharts.js"></script>
     <script src="assets/js/pages/dashboard.js"></script>
 </body>
