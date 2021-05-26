@@ -140,9 +140,12 @@ def heatmap(request):
 
 def overview(request):
     latestTS = get_last_ts()
-    labels,data1,data2 = population_building_graph()
-    labelMonth,dataMonth = users_per_month()
-    labelWeek,dataWeek = users_per_week()
+    labels, data1, data2 = population_building_graph()
+    labelMonth, dataMonth = users_per_month()
+    labelWeek, dataWeek = users_per_week()
+    data2_4, data5 = frequencyUsage()
+    download, upload = bandwidthUsage()
+
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
         residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
@@ -154,16 +157,20 @@ def overview(request):
 
     tparams = {
         'people_count' : people_count,
-        'residentials_people_count' : residentials_people_count,
-        'campus_people_count' : campus_people_count,
-        'time':timestamp,
+        'residentials_people_count': residentials_people_count,
+        'campus_people_count': campus_people_count,
+        'time': timestamp,
         'labels': labels,
         'data1': data1,
         'data2': data2,
-        'labelMonth' : labelMonth,
-        'labelWeek' : labelWeek,
-        'dataMonth' : dataMonth,
-        'dataWeek' : dataWeek,
+        'labelMonth': labelMonth,
+        'labelWeek': labelWeek,
+        'dataMonth': dataMonth,
+        'dataWeek': dataWeek,
+        'data2_4': data2_4,
+        'data5': data5,
+        'download': download,
+        'upload': upload,
     }
     return render(request, 'overview.html', tparams)
 
@@ -263,6 +270,28 @@ def uploadChart():
         data.append(random.randint(5000))
 
     return aps,data
+
+def frequencyUsage():
+    buildings = get_building_names()
+    data2_4 = []
+    data5 = []
+
+    for i in range(0, len(buildings)):
+        data2_4.append(random.randint(500))
+        data5.append(random.randint(500))
+
+    return data2_4, data5
+
+def bandwidthUsage():
+    buildings = get_building_names()
+    download = []
+    upload = []
+
+    for i in range(0, len(buildings)):
+        download.append(random.randint(1000))
+        upload.append(random.randint(1000))
+
+    return download, upload
 
 def get_buildings_count():
     latestTS = get_last_ts()

@@ -159,6 +159,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Frequency usage through buildings</h4>
+                                </div>
+                                <div class="card-body">
+                                     <canvas id="frequency_usage"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Download/Upload bandwidth through buildings</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bandwidth_usage"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
 
@@ -193,13 +219,13 @@
             labels: {{labels| safe}},
     datasets: [{
         label: 'People on Campus',
-        backgroundColor: 'blue',
+        backgroundColor: '#3d95ef',
         data: {{data1| safe}},
         stack: 'Stack 0'
             },
     {
         label: 'Going to Campus',
-        backgroundColor: 'red',
+        backgroundColor: '#43c6df',
         data: {{data2| safe}},
         stack: 'Stack 0'
             }
@@ -227,61 +253,129 @@
         type: 'line',
         data: {
             labels: {{labelMonth | safe}},
-    datasets: [{
-        label: 'Users',
-        data: {{dataMonth | safe}},
-        borderColor: 'blue'
-                            }]
-                        },
-    options: {
-        responsive: true,
-            interaction: {
-            mode: 'index',
-                intersect: false,
-                            },
-        stacked: false,
-            plugins: {
-            title: {
-                display: true,
-                    text: "Users per month"
-            }
+            datasets: [{
+            label: 'Users',
+            data: {{dataMonth | safe}},
+            borderColor: '#3d95ef',
+
+            }]
         },
-    }
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Users per month"
+                }
+            },
+        }
     };
 
     var configWeek = {
         type: 'line',
         data: {
             labels: {{labelWeek | safe}},
-    datasets: [{
-        label: 'Users',
-        data: {{dataWeek | safe}},
-        borderColor: 'blue'
-                            }]
-                        },
-    options: {
-        responsive: true,
+            datasets: [{
+                label: 'Users',
+                data: {{dataWeek | safe}},
+                borderColor: '#3d95ef'
+            }]
+        },
+        options: {
+            responsive: true,
             interaction: {
-            mode: 'index',
+                mode: 'index',
                 intersect: false,
-                            },
-        stacked: false,
+            },
+            stacked: false,
             plugins: {
+                title: {
+                    display: true,
+                    text: "Users per Week"
+                }
+            },
+        }
+    };
+
+    var configFreq = {
+        type: 'line',
+        data: {
+            labels: {{labels|safe}},
+            datasets: [{
+                label: '2.4GHz',
+                borderColor: '#ff9535',
+                fill : false,
+                data: {{data2_4|safe}},
+                stack: 'Stack 0'
+                },
+                {
+                label: '5GHz',
+                borderColor: '#3d95ef',
+                fill : false,
+                data: {{data5|safe}},
+                stack: 'Stack 0'
+                }]
+        },
+        options: {
+        responsive: true,
+        title: {
+            display: true,
+                text: 'Frequency usage'
+        }
+    }
+    };
+
+    var configBandwidth = {
+        type: 'bar',
+        data: {
+            labels: {{labels| safe}},
+            datasets: [{
+                label: 'Download bandwidth',
+                backgroundColor: '#3d95ef',
+                data: {{download| safe}},
+                stack: 'Stack 0'
+            },
+            {
+                label: 'Upload bandwidth',
+                backgroundColor: '#43c6df',
+                data: {{upload| safe}},
+                stack: 'Stack 0'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    stacked: true,
+                },
+                x: {
+                stacked: true
+                }
+            },
+            legend: {position: 'top', },
             title: {
                 display: true,
-                    text: "Users per Week"
+                text: 'Download/Upload bandwidth'
             }
-        },
-    }
+        }
     };
 
     window.onload = function () {
         var ctp = document.getElementById("population_building_graph")
         var ctm = document.getElementById("users_per_month")
         var ctw = document.getElementById("users_per_week")
+        var ctf = document.getElementById("frequency_usage")
+        var ctb = document.getElementById("bandwidth_usage")
         window.populationChart = new Chart(ctp, configPeople);
         window.monthChart = new Chart(ctm, configMonth);
         window.weekChart = new Chart(ctw, configWeek);
+        window.freqChart = new Chart(ctf, configFreq);
+        window.bandChart = new Chart(ctb, configBandwidth);
     };
 </script>
 </body>
