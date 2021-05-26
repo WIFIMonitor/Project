@@ -78,7 +78,7 @@
 
             <div class="page-content">
                 <section class="row">
-                    <div class="col-12 col-lg-9">
+                    <div class="col-12">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
@@ -100,6 +100,30 @@
                                             <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>APs download bandwidth</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="downloadChart" data-url="{% url 'downloadChart' %}"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>APs upload bandwidth</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="uploadChart" data-url="{% url 'uploadChart' %}"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -196,7 +220,87 @@
       });
       }
     });
-  </script>
+    </script>
+
+    <script>
+        $(function () {
+            var $myGraph = $("#downloadChart");
+
+            $.ajax({
+                url: $myGraph.data("url"),
+                success: function (data) {
+                    var ctx = $myGraph[0].getContext("2d");
+
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: data.data,
+                                backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+                                borderColor: "white"
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            stacked: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Download bandwidth"
+                                }
+                            },
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            var $myGraph = $("#uploadChart");
+
+            $.ajax({
+                url: $myGraph.data("url"),
+                success: function (data) {
+                    var ctx = $myGraph[0].getContext("2d");
+
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: data.data,
+                                backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+                                borderColor: "white"
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            stacked: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Upload bandwidth"
+                                }
+                            },
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     <script src="assets/vendors/apexcharts/apexcharts.js"></script>
     <script src="assets/js/pages/dashboard.js"></script>
 </body>

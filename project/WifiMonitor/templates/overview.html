@@ -204,9 +204,23 @@
                             data: { labels: data.labels,
                                     datasets: [{ label: 'Population',
                                                  backgroundColor: 'blue',
-                                                 data: data.data}]
+                                                 data: data.data,
+                                                 stack: 'Stack 0'},
+                                               { label: 'Going',
+                                                 backgroundColor: 'red',
+                                                 data: data.data2,
+                                                 stack: 'Stack 0'}
+                                              ]
                                   },
                             options: { responsive: true,
+                                       scales: {
+                                            y: {
+                                                stacked: true,
+                                            },
+                                            x: {
+                                                stacked: true
+                                            }
+                                       },
                                        legend: { position: 'top', },
                                        title: { display: true,
                                                 text: 'Population Bar Chart' }

@@ -36,4 +36,6 @@ urlpatterns = [
     path('specific_building_monthly_users/<str:building>/', views.specific_building_monthly_users, name='specific_building_monthly_users'),
     path('line_graph_monthly_users/<str:building>/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
     path('line_graph_monthly_users/', views.line_graph_monthly_users, name='line_graph_monthly_users'),
+    path('downloadChart/', views.downloadChart, name='downloadChart'),
+    path('uploadChart/', views.uploadChart, name='uploadChart'),
 ]

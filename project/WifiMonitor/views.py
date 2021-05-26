@@ -168,9 +168,14 @@ def population_building_graph(request):
     labels = list(count.keys())
     data = list(count.values())
 
+    data2 = []
+    for i in range(1, 53):
+        data2.append(random.randint(25))
+
     return JsonResponse(data={
         'labels': labels,
         'data': data,
+        'data2': data2,
     })
 
 def specific_building(request, building=None):
@@ -270,6 +275,30 @@ def users_per_week(request):
 
     return JsonResponse(data={
         'labels': lst,
+        'data': data
+    })
+
+def downloadChart(request):
+    aps = []
+    data = []
+    for i in range(1,11):
+        aps.append("AP-"+str(i))
+        data.append(random.randint(5000))
+
+    return JsonResponse(data={
+      'labels': aps,
+      'data': data
+    })
+
+def uploadChart(request):
+    aps = []
+    data = []
+    for i in range(1, 11):
+        aps.append("AP-" + str(i))
+        data.append(random.randint(5000))
+
+    return JsonResponse(data={
+        'labels': aps,
         'data': data
     })
 
