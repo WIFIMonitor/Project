@@ -128,7 +128,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header" style="text-align: center">
                                     <h4>Distribution through buildings</h4>
                                 </div>
                                 <div class="card-body">
@@ -140,7 +140,7 @@
 
                     <div class="col-12 col-lg-6">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header" style="text-align: center">
                                 <h4>Users distribution per month</h4>
                             </div>
                             <div class="card-body">
@@ -151,7 +151,7 @@
 
                     <div class="col-12 col-lg-6">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header" style="text-align: center">
                                 <h4>Users distribution per week</h4>
                             </div>
                             <div class="card-body">
@@ -163,7 +163,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header" style="text-align: center">
                                     <h4>Frequency usage through buildings</h4>
                                 </div>
                                 <div class="card-body">
@@ -176,8 +176,8 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4>Download/Upload bandwidth through buildings</h4>
+                                <div class="card-header" style="text-align: center">
+                                    <h4>Total bandwidth through buildings</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="bandwidth_usage"></canvas>
@@ -242,10 +242,6 @@
             }
         },
         legend: {position: 'top', },
-        title: {
-            display: true,
-                text: 'People on UA'
-        }
     }
     };
 
@@ -267,12 +263,6 @@
                 intersect: false,
             },
             stacked: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Users per month"
-                }
-            },
         }
     };
 
@@ -293,12 +283,6 @@
                 intersect: false,
             },
             stacked: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Users per Week"
-                }
-            },
         }
     };
 
@@ -308,7 +292,7 @@
             labels: {{labels|safe}},
             datasets: [{
                 label: '2.4GHz',
-                borderColor: '#ff9535',
+                borderColor: '#43c6df',
                 fill : false,
                 data: {{data2_4|safe}},
                 stack: 'Stack 0'
@@ -323,10 +307,6 @@
         },
         options: {
         responsive: true,
-        title: {
-            display: true,
-                text: 'Frequency usage'
-        }
     }
     };
 
@@ -358,10 +338,6 @@
                 }
             },
             legend: {position: 'top', },
-            title: {
-                display: true,
-                text: 'Download/Upload bandwidth'
-            }
         }
     };
 

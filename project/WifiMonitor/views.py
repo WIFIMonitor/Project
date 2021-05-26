@@ -188,13 +188,19 @@ def population_building_graph():
 
 def specific_building(request, building=None):
     global prev_id
-    specific_build_form = SpecificBuildingForm(request.POST or None) 
+    specific_build_form = SpecificBuildingForm(request.POST or None)
+    devices = []
+    devicesData = []
+    labelsMonth = []
+    dataMonth = []
     dataDist=[]
     labelsDist=[]
     labelDownload = []
     labelUpload = []
     dataDownload = []
     dataUpload = []
+    labelsWeek = []
+    dataWeek = []
 
     if(request.method=='POST'):
         if specific_build_form.is_valid():
@@ -202,6 +208,9 @@ def specific_building(request, building=None):
             dataDist,labelsDist = line_graph(building)
             labelDownload,dataDownload = downloadChart()
             labelUpload,dataUpload = uploadChart()
+            devices, devicesData = devicesTypes()
+            labelsMonth, dataMonth = usersMonth()
+            labelsWeek, dataWeek = usersWeek()
 
     prev_id = id
     tparams = {
@@ -215,6 +224,12 @@ def specific_building(request, building=None):
         'dataDownload' : dataDownload,
         'labelUpload' : labelUpload,
         'dataUpload': dataUpload,
+        'devices': devices,
+        'dataDevices': devicesData,
+        'labelsMonth': labelsMonth,
+        'dataMonth': dataMonth,
+        'labelsWeek': labelsWeek,
+        'dataWeek': dataWeek
     }
     return render(request, 'specific_building.html', tparams)
 
@@ -287,6 +302,34 @@ def bandwidthUsage():
         upload.append(random.randint(1000))
 
     return download, upload
+
+def devicesTypes():
+    labels = ["Android", "IOS", "PC"]
+    data = []
+
+    for i in range(0, 3):
+        data.append(random.randint(500))
+
+    return labels, data
+
+def usersMonth():
+    labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+              "November", "December"]
+    data = []
+
+    for i in range(0, len(labels)):
+        data.append(random.randint(500))
+
+    return labels, data
+
+def usersWeek():
+    lst = []
+    data = []
+    for i in range(1, 54):
+        lst.append(i)
+        data.append(random.randint(500))
+
+    return lst, data
 
 def get_buildings_count():
     latestTS = get_last_ts()

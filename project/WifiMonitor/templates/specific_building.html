@@ -106,7 +106,7 @@
                         <div class="col-12 col-lg-6">
                             <div class="card">
                                 <div class="card-header" style="text-align: center">
-                                    <h4>APs download bandwidth</h4>
+                                    <h4>Download bandwidth per access point</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="downloadChart"></canvas>
@@ -117,10 +117,47 @@
                         <div class="col-12 col-lg-6">
                             <div class="card">
                                 <div class="card-header" style="text-align: center">
-                                    <h4>APs upload bandwidth</h4>
+                                    <h4>Upload bandwidth per access point</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="uploadChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>Devices types</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="devicesTypes"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>Users distribution per month</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="usersMonth"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>Users distribution per week</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="usersWeek"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -160,8 +197,8 @@
         datasets: [{
           data: {{ dataDist|safe }},
           label: 'Users Conected',
-          backgroundColor : 'red',
-          borderColor: 'red'
+          backgroundColor : '#3d95ef',
+          borderColor: '#3d95ef'
         }],
         labels: {{ labelsDist|safe }}
       },
@@ -176,25 +213,19 @@
         datasets: [{
           data: {{ dataDownload|safe }},
           label: 'Download bandwidth',
-          backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+          backgroundColor: ["#139cb4", "#68dbf3", "#0d6caf", "#2c98e4"],
             borderColor : 'white'
         }],
         labels: {{ labelDownload|safe }}
       },
-                    options: {
-                            responsive: true,
-                            interaction: {
-                                mode: 'index',
-                                intersect: false,
-                            },
-                            stacked: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: "Download bandwidth"
-                                }
-                            },
-                        }
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+            }
     };
 
     var configUpload = {
@@ -203,34 +234,96 @@
         datasets: [{
           data: {{ dataUpload|safe }},
           label: 'Upload bandwidth',
-          backgroundColor: ["#43c6df", "#fed644", "#ffa029", "#2c98e4"],
+          backgroundColor: ["#139cb4", "#68dbf3", "#0d6caf", "#2c98e4"],
             borderColor : 'white'
         }],
         labels: {{ labelUpload|safe }}
       },
-                    options: {
-                            responsive: true,
-                            interaction: {
-                                mode: 'index',
-                                intersect: false,
-                            },
-                            stacked: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: "Upload bandwidth"
-                                }
-                            },
-                        }
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+            }
+    };
+
+    var configDevices = {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: {{ dataDevices|safe }},
+                label: 'Upload bandwidth',
+                backgroundColor: ["#43c6df", "#2c98e4", "#0d6caf"],
+                borderColor : 'white'
+            }],
+            labels: {{ devices|safe }}
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+
+        }
+    };
+
+    var configMonth = {
+        type: 'line',
+        data: {
+            labels: {{labelsMonth|safe}},
+            datasets: [{
+            label: 'Users',
+            data: {{dataMonth|safe}},
+            borderColor: '#3d95ef',
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+        }
+    };
+
+    var configWeek = {
+        type: 'line',
+        data: {
+            labels: {{labelsWeek|safe}},
+            datasets: [{
+                label: 'Users',
+                data: {{dataWeek|safe}},
+                borderColor: '#3d95ef'
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+        }
     };
 
     window.onload = function() {
     var ctl = document.getElementById('line_Graph')
     var ctd = document.getElementById('downloadChart')
     var ctu = document.getElementById('uploadChart')
+    var ctdevices = document.getElementById('devicesTypes')
+    var ctm = document.getElementById('usersMonth')
+    var ctw = document.getElementById('usersWeek')
     window.linechart = new Chart(ctl, configLine);
     window.downloadchart = new Chart(ctd, configDownload);
     window.uploadchart = new Chart(ctu, configUpload);
+    window.devicesChart = new Chart(ctdevices, configDevices);
+    window.monthChart = new Chart(ctm, configMonth);
+    window.weekChart = new Chart(ctw, configWeek);
   };
     </script>
 
