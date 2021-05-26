@@ -100,7 +100,7 @@
                                         </form>
 
                                         <div id="container" style="width: 100%; align-items: center">
-                                            <canvas id="myGraph" data-url="{% url 'line_graph' %}"></canvas>
+                                            <canvas id="myGraph" data-url="{% url 'line_graph_monthly_users' %}"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
         var strUser = e.value;
         {#var x = document.getElementById("sel").value;#}
         {#document.getElementById("demo").innerHTML = "You selected: " + x;#}
-        window.location = "http://127.0.0.1:8000/specific_building/" + strUser;
+        window.location = "http://127.0.0.1:8000/specific_building_monthly_users/" + strUser;
     }
     </script>
 
