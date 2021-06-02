@@ -75,8 +75,8 @@
             <h3 style="margin-bottom: 25px;">Heatmap {{time|safe}}</h3>
             <div class="container">
                 <div class="box"></div>
-                    <div class="box overlay"></div>
-                </div>
+                <div class="box overlay"></div>
+            </div>
             <section class="row">
                 <div class="col-12 col-lg-9">
                     <div class="row">
@@ -84,11 +84,36 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div id='map' style='height:800px; width:100%;'></div>
-                                    {% if graph %}
-                                    <div>
-                                        {{ graph|safe }}
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="timelapseVisualization" tabindex="-1" role="dialog"
+                                        aria-labelledby="timelapseVisualization" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content" style="width:550px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Timelapse Generated</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {% if graph %}
+                                                    <div>
+                                                        {{ graph|safe }}
+                                                    </div>
+                                                    {% else %}
+                                                        No Timelapse Generated Yet.
+                                                    {% endif %}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        <span class="d-none d-sm-block">Close</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -105,6 +130,11 @@
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#timelapse" style="background-color:#0E94f1; border-color:#0E94f1">
                                 <i class="fas fa-history" style="color: white; margin-right: 7px"></i>Timelapse
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#timelapseVisualization"
+                                style="background-color:#0E94f1; border-color:#0E94f1">
+                                <i class="fas fa-eye" style="color: white; margin-right: 7px"></i>View
                             </button>
                             <div class="modal fade" id="timelapse" tabindex="-1" aria-labelledby="timelapseTitle"
                                 style="display: none;" aria-hidden="true">
@@ -123,7 +153,8 @@
                                                     {{date_form.start}}
                                                 </div>
 
-                                                <div class="card" style="margin-top: 10px; margin-right:25px;margin-left:5px;">
+                                                <div class="card"
+                                                    style="margin-top: 10px; margin-right:25px;margin-left:5px;">
                                                     <label for="id_to">To</label>
                                                     {{date_form.end}}
                                                 </div>
@@ -134,7 +165,9 @@
                                                     data-bs-dismiss="modal">
                                                     <span class="d-none d-sm-block">Close</span>
                                                 </button>
-                                                <button type="submit" class="btn btn-primary ml-1" name="timelapse_submit" style="background-color:#0E94f1; border-color:#0E94f1">
+                                                <button type="submit" class="btn btn-primary ml-1"
+                                                    name="timelapse_submit"
+                                                    style="background-color:#0E94f1; border-color:#0E94f1">
                                                     <span class="d-none d-sm-block">Submit</span>
                                                 </button>
                                             </div>
@@ -155,7 +188,8 @@
                                 <div class="card-group">
                                     <div class="card">
                                         <button type="submit" class="btn btn-primary"
-                                            style="height: 30px; width: 60px; background-color:#0E94f1;border-color:#0E94f1" name="intent_submit">Yes</button>
+                                            style="height: 30px; width: 60px; background-color:#0E94f1;border-color:#0E94f1"
+                                            name="intent_submit">Yes</button>
                                     </div>
                                     <div class="card">
                                         <div class="multi_select_box" style="height:30px">
