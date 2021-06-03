@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.shortcuts import render
 from influxdb import InfluxDBClient
 import plotly.express as px
@@ -41,9 +40,10 @@ def load_ap_coords():
 
 coords = load_ap_coords()
 
-def get_timelapse_dictionary(dataset,endtime,starttime,measure):
+def get_timelapse_dictionary(dataset,starttime,measure):
     # query values between last measurement, minus 15 minutes
-    sq = "select id,clientsCount from clientsCount where time <=\'"+starttime+"m and time > \'" +endtime+"m"
+    sq = "select id,clientsCount from clientsCount where time >=\'"+starttime
+    print(sq)
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
@@ -102,12 +102,10 @@ def heatmap(request):
             if date_form.is_valid():
                 start = date_form.cleaned_data.get('start')
                 end = date_form.cleaned_data.get('end')
-
-                start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
-                end_time = datetime.strptime(str(end), "%Y-%m-%d").isoformat('T')
+                days = end-start
 
                 #generate timelapse graph
-                graph = generateTimelapse(start_time,end_time)
+                graph = generateTimelapse(start,days)
 
         if 'intent_submit' in request.POST:
             if intent_form.is_valid():
@@ -336,7 +334,6 @@ def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
         res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= \'"+latestTS+"\'-15m ").raw['series'][0]["values"]
-        #print(res)
         count = {}
 
         #count(chave=edificio, value=n de pessoas no edificio)
@@ -356,7 +353,6 @@ def get_buildings_count():
 
 def get_building_names():
     res = Departments.objects.all().order_by('name')
-    print(res)
     buildings = []
 
     for x in res:
@@ -387,19 +383,19 @@ def get_building_lastday_population():
 
     return count
 
-def generateTimelapse(start_time,end_time):
+def generateTimelapse(start,days):
     dataset = []
-    latestTS = get_last_ts()
-    # Generate 10 timelaspes. In the future it will be decided by the user input
-    for x in range(1,5):
+    start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T') + 'Z'
+
+    # Generate timelaspes X timelapses, where X is 94 * days, because, theres 94 measures in each day
+    for x in range(0,(94*days.days)):
         try:
             # since we get values every 15 minutes, we need to now how many 15 minute measures we want
-            sub1 = str(15*x)
-            sub2 = str(15*(x-1))
-            endtime = str(latestTS) + "\' -"+sub2
-            starttime = str(latestTS) + "\' -"+sub1
+            offset = str(15*x)
+            offset2 = str(15*(x+1))
+            query_time = start_time + "\' +"+offset+"m and time <= \'" + start_time + "\' + "+offset2+"m"
 
-            get_timelapse_dictionary(dataset,starttime,endtime,x)
+            get_timelapse_dictionary(dataset,query_time,x)
         except Exception as e:
             print(e)
             continue
@@ -417,7 +413,7 @@ def generateTimelapse(start_time,end_time):
                     [0.7, "yellow"],
                     [0.9, "red"],
                     [1.0, "red"]],
-            title= str(latestTS) + "- " + str((x*15)) + "m",
+            title= "Timelapse de: " + start_time[0:10] + " com 15 minutos de intervalo ",
             range_color=(0,30), #max and min values for heatmap
             )
 

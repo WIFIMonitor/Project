@@ -124,6 +124,9 @@
                     <div class="card">
                         <div class="card-header" style="text-align: center">
                             <h4>Want to generate an heatmap timelapse?</h4>
+                            {% if date_form.non_field_errors %}
+                            <b style="color:red; text-align:center;margin-bottom:0px;">Data de fim têm de ser maior que a data de início!</b>
+                            {% endif %}
                         </div>
                         <div class="card-body" style="align-self: center">
                             <!-- Button to launch modal -->
@@ -152,7 +155,6 @@
                                                     <label for="id_xfrom">From</label>
                                                     {{date_form.start}}
                                                 </div>
-
                                                 <div class="card"
                                                     style="margin-top: 10px; margin-right:25px;margin-left:5px;">
                                                     <label for="id_to">To</label>
