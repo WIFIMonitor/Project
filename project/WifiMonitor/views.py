@@ -242,7 +242,6 @@ def line_graph(building = None):
         labels.append(sample[0][sample[0].find('T')+1: -4])
         data.append(sample[1])
 
-
     return data,labels
 
 def users_per_month():
@@ -323,14 +322,19 @@ def usersMonth(building):
 def usersWeek(building):
     lst = []
     data = []
-
-    latestTS = get_last_ts()
-    #print(client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"])
+    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'" + building + "\' and time >=\'2021-05-07T00:46:37.506123Z\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"]
+    j=0
     for i in range(1, 54):
         lst.append(i)
-        data.append(random.randint(500))
-
-    return lst, data
+        if i<19:
+            data.append(0)
+        elif j<len(values):
+            data.append(values[j][1])
+            j+=1
+        else:
+            data.append(0)
+        
+    return lst,data
 
 def get_buildings_count():
     latestTS = get_last_ts()
