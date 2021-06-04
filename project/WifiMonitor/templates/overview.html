@@ -304,27 +304,34 @@
     };
 
     var configFreq = {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: {{labels|safe}},
+            labels: {{labels| safe}},
             datasets: [{
                 label: '2.4GHz',
-                borderColor: '#43c6df',
-                fill : false,
-                data: {{data2_4|safe}},
+                backgroundColor: '#3d95ef',
+                data: {{data2_4| safe}},
                 stack: 'Stack 0'
-                },
-                {
+            },
+            {
                 label: '5GHz',
-                borderColor: '#3d95ef',
-                fill : false,
-                data: {{data5|safe}},
+                backgroundColor: '#43c6df',
+                data: {{data5| safe}},
                 stack: 'Stack 0'
-                }]
+            }]
         },
         options: {
-        responsive: true,
-    }
+            responsive: true,
+            scales: {
+                y: {
+                    stacked: true,
+                },
+                x: {
+                stacked: true
+                }
+            },
+            legend: {position: 'top', },
+        }
     };
 
     var configBandwidth = {
