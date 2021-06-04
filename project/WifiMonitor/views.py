@@ -2,7 +2,7 @@ from django.shortcuts import render
 from influxdb import InfluxDBClient
 import plotly.express as px
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from .forms import DateForm,IntentionForm,SpecificBuildingForm
 from .models import Departments
 from django.db.models import F,Sum
@@ -43,7 +43,6 @@ coords = load_ap_coords()
 def get_timelapse_dictionary(dataset,starttime,measure):
     # query values between last measurement, minus 15 minutes
     sq = "select id,clientsCount from clientsCount where time >=\'"+starttime
-    print(sq)
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
@@ -385,17 +384,20 @@ def get_building_lastday_population():
 
 def generateTimelapse(start,days):
     dataset = []
-    start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T') + 'Z'
-
-    # Generate timelaspes X timelapses, where X is 94 * days, because, theres 94 measures in each day
-    for x in range(0,(94*days.days)):
+    start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
+    # add hours,minutes and seconds precision to above date
+    time_measure= datetime.strptime(start_time,'%Y-%m-%dT%H:%M:%S') 
+    # Generate timelaspes X timelapses, where X is 96 * days, because, theres 96 measures in each day
+    for x in range(0,(96*days.days)):
         try:
             # since we get values every 15 minutes, we need to now how many 15 minute measures we want
             offset = str(15*x)
             offset2 = str(15*(x+1))
-            query_time = start_time + "\' +"+offset+"m and time <= \'" + start_time + "\' + "+offset2+"m"
-
-            get_timelapse_dictionary(dataset,query_time,x)
+            query_time = start_time + "Z\' +"+offset+"m and time <= \'" + start_time + "Z\' + "+offset2+"m"
+            # add 15 minutes to each query, for better visualization of the slider
+            measure_time = time_measure + timedelta(minutes=(float(offset2)))
+            slider_step = str(measure_time)[11:16] # only get the Hours:Minutes part of the string
+            get_timelapse_dictionary(dataset,query_time,slider_step)
         except Exception as e:
             print(e)
             continue
@@ -404,7 +406,7 @@ def generateTimelapse(start,days):
             center=dict(lat=40.63193066543083, lon=-8.658186691344712),
             zoom=15,
             mapbox_style="stamen-terrain",
-            width=500,
+            width=900,
             height=700,
             color_continuous_scale= [
                     [0.0, "green"],
@@ -413,7 +415,7 @@ def generateTimelapse(start,days):
                     [0.7, "yellow"],
                     [0.9, "red"],
                     [1.0, "red"]],
-            title= "Timelapse de: " + start_time[0:10] + " com 15 minutos de intervalo ",
+            title= "Timelapse de: " + start_time[0:10], 
             range_color=(0,30), #max and min values for heatmap
             )
 
