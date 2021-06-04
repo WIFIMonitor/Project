@@ -206,8 +206,8 @@ def specific_building(request, building=None):
             labelDownload,dataDownload = downloadChart()
             labelUpload,dataUpload = uploadChart()
             devices, devicesData = devicesTypes()
-            labelsMonth, dataMonth = usersMonth()
-            labelsWeek, dataWeek = usersWeek()
+            labelsMonth, dataMonth = usersMonth(str(building).lower())
+            labelsWeek, dataWeek = usersWeek(str(building).lower())
 
     prev_id = id
     tparams = {
@@ -279,13 +279,11 @@ def uploadChart():
     return aps,data
 
 def frequencyUsage():
-    buildings = get_building_names()
-    data2_4 = []
-    data5 = []
-
-    for i in range(0, len(buildings)):
-        data2_4.append(random.randint(500))
-        data5.append(random.randint(500))
+    count2_4 = get_building_24_ghz()
+    count5 = get_building_5_ghz()
+    
+    data2_4 = list(count2_4.values())
+    data5 = list(count5.values())
 
     return data2_4, data5
 
@@ -309,19 +307,25 @@ def devicesTypes():
 
     return labels, data
 
-def usersMonth():
+def usersMonth(building):
     labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
               "November", "December"]
     data = []
+
+    latestTS = get_last_ts()
+    #print(client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"])
 
     for i in range(0, len(labels)):
         data.append(random.randint(500))
 
     return labels, data
 
-def usersWeek():
+def usersWeek(building):
     lst = []
     data = []
+
+    latestTS = get_last_ts()
+    #print(client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"])
     for i in range(1, 54):
         lst.append(i)
         data.append(random.randint(500))
@@ -333,6 +337,50 @@ def get_buildings_count():
     try:
         #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
         res = client.query("select \"building\",\"clientsCount\" from clientsCount where time >= \'"+latestTS+"\'-15m ").raw['series'][0]["values"]
+        count = {}
+
+        #count(chave=edificio, value=n de pessoas no edificio)
+        for sample in res:
+            building = sample[1]
+            if building == 'ra':
+                continue
+            if building not in count:
+                count[building] = int(sample[2])
+            else:
+                count[building] = count[building] + int(sample[2])
+    except:
+        print('ERROR: getting data from DB')
+        count = {}
+
+    return count
+
+def get_building_24_ghz():
+    latestTS = get_last_ts()
+    try:
+        #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
+        res = client.query("select \"building\",\"clientsCount2_4Ghz\" from clientsCount where time >= \'"+latestTS+"\'-15m ").raw['series'][0]["values"]
+        count = {}
+
+        #count(chave=edificio, value=n de pessoas no edificio)
+        for sample in res:
+            building = sample[1]
+            if building == 'ra':
+                continue
+            if building not in count:
+                count[building] = int(sample[2])
+            else:
+                count[building] = count[building] + int(sample[2])
+    except:
+        print('ERROR: getting data from DB')
+        count = {}
+
+    return count
+
+def get_building_5_ghz():
+    latestTS = get_last_ts()
+    try:
+        #query para obter os n de pessoas conectados a cada ap no intervalo entre[0-15min]. o +45min da query deve-se ao facto do now() devolver em utc
+        res = client.query("select \"building\",\"clientsCount5Ghz\" from clientsCount where time >= \'"+latestTS+"\'-15m ").raw['series'][0]["values"]
         count = {}
 
         #count(chave=edificio, value=n de pessoas no edificio)
