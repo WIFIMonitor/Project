@@ -2,11 +2,12 @@ from django.shortcuts import render
 from influxdb import InfluxDBClient
 import plotly.express as px
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from .forms import DateForm,IntentionForm,SpecificBuildingForm
 from .models import Departments
 from django.db.models import F,Sum
 from numpy import random
+import timeit
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
@@ -40,29 +41,31 @@ def load_ap_coords():
 
 coords = load_ap_coords()
 
-def get_timelapse_dictionary(dataset,starttime,measure):
+def get_timelapse_dictionary(starttime,measure):
     # query values between last measurement, minus 15 minutes
     sq = "select id,clientsCount from clientsCount where time >=\'"+starttime
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
     except:
-        return
-
+        return []
+    
+    # create dataset of the measures between the two start and end times
+    dataset = []
     for line in people_count:
         # only add to the timelapse points that have people conected, to not overload the array
         if line[2] != 0:
             if line[1] in coords:
-                dic = {"id": line[1],
-                        "lat": coords[line[1]]["lat"],
+                dic = { "lat": coords[line[1]]["lat"],
                         "lon":coords[line[1]]["lon"],
-                        "piso":coords[line[1]]["piso"],
                         "people":line[2],
                         "measure":measure,
                         }
                 dataset.append(dic)
             else:
                 continue
+
+    return dataset
 
 def get_heatmap_dictionary():
     latestTS = get_last_ts()
@@ -102,9 +105,12 @@ def heatmap(request):
                 start = date_form.cleaned_data.get('start')
                 end = date_form.cleaned_data.get('end')
                 days = end-start
-
+                
+                start_time = timeit.default_timer()
                 #generate timelapse graph
                 graph = generateTimelapse(start,days)
+                end_time = timeit.default_timer()
+                print("Time taken to create timelapse: ", end_time-start_time)
 
         if 'intent_submit' in request.POST:
             if intent_form.is_valid():
@@ -435,6 +441,7 @@ def get_building_lastday_population():
     return count
 
 def generateTimelapse(start,days):
+    #create a dataset with the measures for the day
     dataset = []
     start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
     # add hours,minutes and seconds precision to above date
@@ -449,18 +456,19 @@ def generateTimelapse(start,days):
             # add 15 minutes to each query, for better visualization of the slider
             measure_time = time_measure + timedelta(minutes=(float(offset2)))
             slider_step = str(measure_time)[11:16] # only get the Hours:Minutes part of the string
-            get_timelapse_dictionary(dataset,query_time,slider_step)
+            # extend yeilds better performance, rather than apppending an array of 776 items
+            dataset.extend(get_timelapse_dictionary(query_time,slider_step))
         except Exception as e:
             print(e)
             continue
-
+    # create the timelapse, where the slider represents the time of the measure of people connected
     fig = px.density_mapbox(dataset, lat='lat', lon='lon', z='people', radius=10,animation_frame='measure',
             center=dict(lat=40.63193066543083, lon=-8.658186691344712),
             zoom=15,
             mapbox_style="stamen-terrain",
             width=900,
             height=700,
-            color_continuous_scale= [
+            color_continuous_scale= [   # color scale for the heatmap
                     [0.0, "green"],
                     [0.3, "green"],
                     [0.5, "yellow"],
@@ -470,5 +478,4 @@ def generateTimelapse(start,days):
             title= "Timelapse de: " + start_time[0:10], 
             range_color=(0,30), #max and min values for heatmap
             )
-
-    return fig.to_html(auto_play=False,full_html=False,include_plotlyjs=False,validate=False)
+    return fig.to_html(auto_play=False,full_html=False,include_plotlyjs=False,validate=True)
