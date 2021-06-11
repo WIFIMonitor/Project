@@ -12,9 +12,13 @@ class DateForm(forms.Form):
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start')
         end_date = cleaned_data.get('end')
-        if end_date <= start_date:
-            raise forms.ValidationError(('end_date error'))
-        return cleaned_data
+        try:
+            if end_date <= start_date:
+                raise forms.ValidationError(('end_date error'))
+            return cleaned_data
+        except:
+            print("No data was passed")
+            return cleaned_data
 
 class IntentionForm(forms.Form):
     departs = forms.ModelChoiceField(queryset=Departments.objects.all().order_by('name'),label="",required=False,empty_label="Departamento")

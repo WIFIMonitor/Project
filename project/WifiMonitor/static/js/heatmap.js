@@ -118,7 +118,6 @@ function CenterControl(controlDiv) {
     controlText.style.paddingRight = "5px";
     controlText.innerHTML = "Show All AP's";
     controlUI.appendChild(controlText);
-    // Setup the click event listeners: simply set the map to Chicago.
     controlUI.addEventListener("click", () => {
         displayMarkers();
     });
