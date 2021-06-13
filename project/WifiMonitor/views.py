@@ -318,11 +318,17 @@ def usersMonth(building):
     data = []
 
     latestTS = get_last_ts()
-    #print(client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+ building +"\' and time <\'"+latestTS+"\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"])
+    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'" + building + "\' and time >=\'2021-05-07T00:46:37.506123Z\'-1h GROUP BY time(15m)) group by time(720h)").raw['series'][0]["values"]
 
+    j=0
     for i in range(0, len(labels)):
-        data.append(random.randint(500))
-
+        if i<4:
+            data.append(0)
+        elif j<len(values):
+            data.append(values[j][1])
+            j+=1
+        else:
+            data.append(0)
     return labels, data
 
 def usersWeek(building):
