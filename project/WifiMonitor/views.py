@@ -248,16 +248,34 @@ def line_graph(building = None):
 
 def users_per_month():
     labels=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November", "December"]
-    data=[2020, 3050, 2500, 4050, 6230, 5022, 3035, 3210, 2080, 3090, 4020, 3272]
+    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(720h)").raw['series'][0]["values"]
+    data=[]
+    j=0
+    for i in range(1, 12):
+        if i<5:
+            data.append(0)
+        elif j<len(values):
+            data.append(float("{:.2f}".format(values[j][1])))
+            j+=1
+        else:
+            data.append(0)
 
     return labels,data
 
 def users_per_week():
     lst = []
+    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"]
     data = []
+    j=0
     for i in range(1, 54):
         lst.append(i)
-        data.append(random.randint(1000))
+        if i<20:
+            data.append(0)
+        elif j<len(values):
+            data.append(float("{:.2f}".format(values[j][1])))
+            j+=1
+        else:
+            data.append(0)
 
     return lst,data
 
