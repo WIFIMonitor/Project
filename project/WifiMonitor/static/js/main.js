@@ -1,13 +1,4 @@
-function slideToggle(t, e, o) {
-  0 === t.clientHeight ? j(t, e, o, !0) : j(t, e, o);
-}
-function slideUp(t, e, o) {
-  j(t, e, o);
-}
-function slideDown(t, e, o) {
-  j(t, e, o, !0);
-}
-function j(t, e, o, i) {
+function togglesubmenu(t, e, o, i) {
   void 0 === e && (e = 400),
     void 0 === i && (i = !1),
     (t.style.overflow = "hidden"),
@@ -49,7 +40,17 @@ function j(t, e, o, i) {
           "function" == typeof o && o())
         : window.requestAnimationFrame(l);
   });
-}
+};
+
+function slideToggle(t, e, o) {
+  0 === t.clientHeight ? togglesubmenu(t, e, o, !0) : togglesubmenu(t, e, o);
+};
+function slideUp(t, e, o) {
+  togglesubmenu(t, e, o);
+};
+function slideDown(t, e, o) {
+  togglesubmenu(t, e, o, !0);
+};
 
 let sidebarItems = document.querySelectorAll('.sidebar-item.has-sub');
 for(var i = 0; i < sidebarItems.length; i++) {
