@@ -141,7 +141,7 @@ def heatmap(request):
 
 def overview(request):
     latestTS = get_last_ts()
-    labels, data1, data2 = population_building_graph()
+    labels, data1 = population_building_graph()
     labelMonth, dataMonth = users_per_month()
     labelWeek, dataWeek = users_per_week()
     data2_4, data5 = frequencyUsage()
@@ -163,7 +163,6 @@ def overview(request):
         'time': timestamp,
         'labels': labels,
         'data1': data1,
-        'data2': data2,
         'labelMonth': labelMonth,
         'labelWeek': labelWeek,
         'dataMonth': dataMonth,
@@ -182,12 +181,8 @@ def population_building_graph():
     count = get_buildings_count()
     labels = list(count.keys())
     data1 = list(count.values())
-
-    data2 = []
-    for i in range(1, 53):
-        data2.append(random.randint(25))
     
-    return labels,data1,data2
+    return labels,data1
 
 def specific_building(request, building=None):
     global prev_id
@@ -306,7 +301,12 @@ def bandwidthUsage():
 def devicesTypes(building):
     latestTS = get_last_ts()
     labels = ["Android", "IOS", "PC"]
-    values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
+    values=[]
+    try:
+        values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
+    except:
+        print('ERROR: getting data from DB')
+
     ls = []
     distinct_ls = []
     for i in values:
