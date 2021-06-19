@@ -6,7 +6,7 @@ from datetime import datetime, time, timedelta
 from .forms import DateForm,IntentionForm,SpecificBuildingForm
 from .models import Departments
 from django.db.models import F,Sum
-from numpy import random
+from numpy import random, signbit
 import timeit
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
@@ -211,7 +211,7 @@ def specific_building(request, building=None):
             dataDist,labelsDist = line_graph(building)
             labelDownload,dataDownload = downloadChart()
             labelUpload,dataUpload = uploadChart()
-            devices, devicesData = devicesTypes()
+            devices, devicesData = devicesTypes(str(building).lower())
             labelsMonth, dataMonth = usersMonth(str(building).lower())
             labelsWeek, dataWeek = usersWeek(str(building).lower())
 
@@ -303,12 +303,25 @@ def bandwidthUsage():
 
     return download, upload
 
-def devicesTypes():
+def devicesTypes(building):
+    latestTS = get_last_ts()
     labels = ["Android", "IOS", "PC"]
-    data = []
+    values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
+    ls = []
+    distinct_ls = []
+    for i in values:
+        if not i[1] in ls:
+            ls.append(i[1])
+            distinct_ls.append(i)
 
-    for i in range(0, 3):
-        data.append(random.randint(500))
+    android = 0
+    ios=0
+    laptop=0
+    for i in reversed(distinct_ls):
+        android+=i[2]
+        ios+=i[3]
+        laptop+=i[4]
+    data = [android, ios, laptop]
 
     return labels, data
 
