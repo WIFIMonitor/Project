@@ -108,7 +108,8 @@ def heatmap(request):
                 
                 start_time = timeit.default_timer()
                 #generate timelapse graph
-                graph = generateTimelapse(start,days)
+                if days.days > 0:
+                    graph = generateTimelapse(start,days)
                 end_time = timeit.default_timer()
                 print("Time taken to create timelapse: ", end_time-start_time)
 
