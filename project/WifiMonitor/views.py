@@ -340,14 +340,17 @@ def bandwidthUsage(labels):
     for i in buildings:
         for j in range(1, len(ls)):
             if ls[j][1].lower() == i:
-                download.append(ls[j][3])
-                upload.append(ls[j][2])
+                download.append(bytes_to_megabytes(ls[j][3]))
+                upload.append(bytes_to_megabytes(ls[j][2]))
                 break
             elif j==len(ls)-1:
                 download.append(0)
                 upload.append(0)
 
     return download, upload
+
+def bytes_to_megabytes(bytes):
+    return bytes/1048576
 
 def devicesTypes(building):
     latestTS = get_last_ts()
