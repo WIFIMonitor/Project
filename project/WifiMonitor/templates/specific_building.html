@@ -102,29 +102,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <div class="card-header" style="text-align: center">
-                                    <h4>Download bandwidth per access point</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="downloadChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <div class="card-header" style="text-align: center">
-                                    <h4>Upload bandwidth per access point</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="uploadChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                     <div class="row">
                         <div class="col-12">
@@ -313,14 +291,10 @@
 
     window.onload = function() {
     var ctl = document.getElementById('line_Graph')
-    var ctd = document.getElementById('downloadChart')
-    var ctu = document.getElementById('uploadChart')
     var ctdevices = document.getElementById('devicesTypes')
     var ctm = document.getElementById('usersMonth')
     var ctw = document.getElementById('usersWeek')
     window.linechart = new Chart(ctl, configLine);
-    window.downloadchart = new Chart(ctd, configDownload);
-    window.uploadchart = new Chart(ctu, configUpload);
     window.devicesChart = new Chart(ctdevices, configDevices);
     window.monthChart = new Chart(ctm, configMonth);
     window.weekChart = new Chart(ctw, configWeek);
