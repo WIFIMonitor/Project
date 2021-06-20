@@ -8,6 +8,7 @@ from .models import Departments
 from django.db.models import F,Sum
 from numpy import random, signbit
 import timeit
+import time
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
 global prev_id
@@ -141,12 +142,16 @@ def heatmap(request):
     return render(request, 'heatmap.html', params)
 
 def overview(request):
+    #next 3 lines evaluate the power of the database, if it is quick enough to respond it will call the weekly and monthly querry (high computacional power)
+    start_time = time.time()
+    client.query("select * from clientsCount where time >=\'"+get_last_ts()+"\'-15m")
+    timetaken = time.time() - start_time
     latestTS = get_last_ts()
     labels, data1 = population_building_graph()
-    labelMonth, dataMonth = users_per_month()
-    labelWeek, dataWeek = users_per_week()
+    labelMonth, dataMonth = users_per_month(timetaken)
+    labelWeek, dataWeek = users_per_week(timetaken)
     data2_4, data5 = frequencyUsage()
-    download, upload = bandwidthUsage()
+    download, upload = bandwidthUsage(labels)
 
     try:
         people_count = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
@@ -246,9 +251,13 @@ def line_graph(building = None):
 
     return data,labels
 
-def users_per_month():
+def users_per_month(timetaken):
     labels=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November", "December"]
-    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(720h)").raw['series'][0]["values"]
+    values = []
+    if timetaken>1:
+        values = []
+    else:
+        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(720h)").raw['series'][0]["values"]
     data=[]
     j=0
     for i in range(1, 12):
@@ -262,9 +271,13 @@ def users_per_month():
 
     return labels,data
 
-def users_per_week():
+def users_per_week(timetaken):
     lst = []
-    values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"]
+    values = []
+    if timetaken>1:
+        values = []
+    else:
+        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where time >=\'2021-05-03T22:28:44.139117Z\' GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"]
     data = []
     j=0
     for i in range(1, 54):
@@ -306,14 +319,33 @@ def frequencyUsage():
 
     return data2_4, data5
 
-def bandwidthUsage():
-    buildings = get_building_names()
+def bandwidthUsage(labels):
+    values=[]
+    try:
+        values = client.query("select * from metricsBuildingCount where time>now()-1h").raw['series'][0]["values"]
+    except:
+        print("ERROR: no recent information about bandwith usage")
+    
+    buildings = labels
     download = []
     upload = []
+    ls_name = []
+    ls = [] 
 
-    for i in range(0, len(buildings)):
-        download.append(random.randint(1000))
-        upload.append(random.randint(1000))
+    for i in reversed(values):
+        if not i[1] in ls_name:
+            ls.append(i)
+            ls_name.append(i[1])
+
+    for i in buildings:
+        for j in range(1, len(ls)):
+            if ls[j][1].lower() == i:
+                download.append(ls[j][3])
+                upload.append(ls[j][2])
+                break
+            elif j==len(ls)-1:
+                download.append(0)
+                upload.append(0)
 
     return download, upload
 
@@ -324,22 +356,19 @@ def devicesTypes(building):
     try:
         values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
     except:
-        print('ERROR: getting data from DB')
+        print("ERROR: building doesn't provide information about devices types")
 
     ls = []
-    distinct_ls = []
-    for i in values:
-        if not i[1] in ls:
-            ls.append(i[1])
-            distinct_ls.append(i)
-
     android = 0
     ios=0
     laptop=0
-    for i in reversed(distinct_ls):
-        android+=i[2]
-        ios+=i[3]
-        laptop+=i[4]
+    for i in reversed(values):
+        if not i[1] in ls:
+            ls.append(i[1])
+            android+=i[2]
+            ios+=i[3]
+            laptop+=i[4]
+        
     data = [android, ios, laptop]
 
     return labels, data
