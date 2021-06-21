@@ -209,12 +209,13 @@ def specific_building(request, building=None):
     if(request.method=='POST'):
         if specific_build_form.is_valid():
             building = specific_build_form.cleaned_data.get('departs')
-            dataDist,labelsDist = line_graph(building)
-            labelDownload,dataDownload = downloadChart()
-            labelUpload,dataUpload = uploadChart()
-            devices, devicesData = devicesTypes(str(building).lower())
-            labelsMonth, dataMonth = usersMonth(str(building).lower())
-            labelsWeek, dataWeek = usersWeek(str(building).lower())
+            if building != None:
+                dataDist,labelsDist = line_graph(building)
+                labelDownload,dataDownload = downloadChart()
+                labelUpload,dataUpload = uploadChart()
+                devices, devicesData = devicesTypes(str(building).lower())
+                labelsMonth, dataMonth = usersMonth(str(building).lower())
+                labelsWeek, dataWeek = usersWeek(str(building).lower())
 
     prev_id = id
     tparams = {
