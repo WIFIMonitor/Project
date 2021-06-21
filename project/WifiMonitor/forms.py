@@ -6,17 +6,9 @@ class DateInput(forms.DateInput):
 
 class DateForm(forms.Form):
     start = forms.DateField(widget=DateInput)
-    end = forms.DateField(widget=DateInput)
 
     def clean(self):
         cleaned_data = super().clean()
-        start_date = cleaned_data.get('start')
-        end_date = cleaned_data.get('end')
-
-        if(start_date != None and end_date!=None):
-            if(end_date < start_date):
-                raise forms.ValidationError(('end_date error'))
-
         return cleaned_data
 
 class IntentionForm(forms.Form):

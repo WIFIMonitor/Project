@@ -104,13 +104,10 @@ def heatmap(request):
         if 'timelapse_submit' in request.POST:
             if date_form.is_valid():
                 start = date_form.cleaned_data.get('start')
-                end = date_form.cleaned_data.get('end')
-                days = end-start
                 
                 start_time = timeit.default_timer()
                 #generate timelapse graph
-                if days.days > 0:
-                    graph = generateTimelapse(start,days)
+                graph = generateTimelapse(start)
                 end_time = timeit.default_timer()
                 print("Time taken to create timelapse: ", end_time-start_time)
 
@@ -511,14 +508,14 @@ def get_building_lastday_population():
 
     return count
 
-def generateTimelapse(start,days):
+def generateTimelapse(start):
     #create a dataset with the measures for the day
     dataset = []
     start_time = datetime.strptime(str(start), "%Y-%m-%d").isoformat('T')
     # add hours,minutes and seconds precision to above date
     time_measure= datetime.strptime(start_time,'%Y-%m-%dT%H:%M:%S') 
     # Generate timelaspes X timelapses, where X is 96 * days, because, theres 96 measures in each day
-    for x in range(0,(96*days.days)):
+    for x in range(0,(96)):
         try:
             # since we get values every 15 minutes, we need to now how many 15 minute measures we want
             offset = str(15*x)

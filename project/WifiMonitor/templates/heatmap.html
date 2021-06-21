@@ -149,14 +149,9 @@
                                         <!-- Modal Body-->
                                         <form action="" method="post">{% csrf_token %}
                                             <div class="card-group" style="margin-bottom: 15px; margin-top: 5px">
-                                                <div class="card" style="margin-left: 25px; margin-top: 10px;">
+                                                <div class="card" style="margin-left: 25px; margin-top: 10px; margin-right:25px">
                                                     <label for="id_xfrom">From</label>
                                                     {{date_form.start}}
-                                                </div>
-                                                <div class="card"
-                                                    style="margin-top: 10px; margin-right:25px;margin-left:5px;">
-                                                    <label for="id_to">To</label>
-                                                    {{date_form.end}}
                                                 </div>
                                             </div>
                                             <!-- Modal Footer-->
