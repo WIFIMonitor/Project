@@ -138,8 +138,8 @@ def overview(request):
     download, upload = bandwidthUsage(labels)
 
     try:
-        people_count = client.query("select sum(\"users\") from usersCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
-        residentials_people_count = client.query("select sum(\"users\") from usersCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
+        people_count = client.query("select sum(\"clientsCount\") from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
+        residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
         campus_people_count = people_count - residentials_people_count
         total_devices = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
     except:
@@ -225,6 +225,8 @@ def line_graph(building = None):
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
         users = client.query("select mean(\"sum\")from (select sum(\"users\") from usersCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+        print(values)
+        print(users)
     labels = []
     data = []
     labels_users = []
@@ -232,11 +234,17 @@ def line_graph(building = None):
 
     for sample in values:
         labels.append(sample[0][sample[0].find('T')+1: -4])
-        data.append(sample[1])
+        if sample[1]!=None:
+            data.append(sample[1])
+        else:
+            data.append(0)
 
     for sample in users:
         labels_users.append(sample[0][sample[0].find('T')+1: -4])
-        data_users.append(sample[1])
+        if sample[1]!=None:
+            data_users.append(sample[1])
+        else:
+            data.append(0)
 
     return data,labels,data_users,labels_users
 
@@ -329,6 +337,7 @@ def devicesTypes(building):
     values=[]
     try:
         values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
+        print(values) 
     except:
         print("ERROR: building doesn't provide information about devices types")
 
@@ -354,7 +363,7 @@ def usersMonth(building):
 
     latestTS = get_last_ts()
     values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'" + building + "\' and time >=\'2021-05-07T00:46:37.506123Z\'-1h GROUP BY time(15m)) group by time(720h)").raw['series'][0]["values"]
-
+    print(values)
     j=0
     for i in range(0, len(labels)):
         if i<4:
@@ -370,6 +379,7 @@ def usersWeek(building):
     lst = []
     data = []
     values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'" + building + "\' and time >=\'2021-05-07T00:46:37.506123Z\'-1h GROUP BY time(15m)) group by time(168h)").raw['series'][0]["values"]
+    print(values)
     j=0
     for i in range(1, 54):
         lst.append(i)
