@@ -172,30 +172,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <form action="" method="post">{% csrf_token %}
-                        <!-- Thinking of going to campus ?-->
-                        <div class="card">
-                            <div class="card-header" style="text-align: center">
-                                <h4>Thinking of going to campus?</h4>
-                            </div>
-                            <div class="card-body" style="align-self: center">
-                                <div class="card-group">
-                                    <div class="card">
-                                        <button type="submit" class="btn btn-primary"
-                                            style="height: 30px; width: 60px; background-color:#0E94f1;border-color:#0E94f1"
-                                            name="intent_submit">Yes</button>
-                                    </div>
-                                    <div class="card">
-                                        <div class="multi_select_box" style="height:30px">
-                                            {{intent_form}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p style="align-self:center"> People currently going to campus: {{people_going}} </p>
-                        </div>
-                    </form>
                 </div>
         </div>
     </div>

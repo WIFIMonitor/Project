@@ -96,7 +96,6 @@ def get_heatmap_dictionary():
 
 def heatmap(request):
     date_form = DateForm(request.POST or None)
-    intent_form = IntentionForm(request.POST or None)
     graph = None
 
     if(request.method=='POST'):
@@ -111,18 +110,7 @@ def heatmap(request):
                 end_time = timeit.default_timer()
                 print("Time taken to create timelapse: ", end_time-start_time)
 
-        if 'intent_submit' in request.POST:
-            if intent_form.is_valid():
-                try:
-                    depart = intent_form.cleaned_data.get('departs')
-                    # get people at the specified department
-                    people_at = Departments.objects.get(name=depart)
-                    # add 1
-                    people_at.people = F('people')+1
-                    #save
-                    people_at.save()
-                except:
-                    print("Invalid choice")
+        
 
     ap_values = get_heatmap_dictionary()
     people_going_to_campus = Departments.objects.aggregate(Sum('people'))['people__sum']
@@ -131,7 +119,6 @@ def heatmap(request):
         'data': json.dumps(ap_values),
         'time': timestamp,
         'date_form': date_form,
-        'intent_form': intent_form,
         'people_going': people_going_to_campus,
         'graph': graph
         }
