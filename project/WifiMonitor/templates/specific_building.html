@@ -80,7 +80,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Distribution through buildings</h4>
+                                        <h4>Average number of devices connected to this building in each of the last 24 hours</h4>
                                     </div>
 
                                     <div class="card-body">
@@ -102,7 +102,18 @@
                         </div>
                     </div>
 
-                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">
+                                    <h4>Average number of users in this building in each of the last 24 hours</h4>
+                                </div>
+                                <div class="card-body" style="width: 90%; height: 70%; align-self: center">
+                                    <canvas id="usersConnected" style="width: 60%; height: 40%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-12">
@@ -174,7 +185,7 @@
       data: {
         datasets: [{
           data: {{ dataDist|safe }},
-          label: 'Users Conected',
+          label: 'Devices Conected',
           backgroundColor : '#3d95ef',
           borderColor: '#3d95ef'
         }],
@@ -184,47 +195,21 @@
         responsive: true
       }
     };
-    
-    var configDownload = {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: {{ dataDownload|safe }},
-          label: 'Download bandwidth',
-          backgroundColor: ["#139cb4", "#68dbf3", "#0d6caf", "#2c98e4"],
-            borderColor : 'white'
-        }],
-        labels: {{ labelDownload|safe }}
-      },
-            options: {
-                responsive: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                stacked: false,
-            }
-    };
 
-    var configUpload = {
-      type: 'pie',
+    var configUser = {
+      type: 'line',
       data: {
         datasets: [{
-          data: {{ dataUpload|safe }},
-          label: 'Upload bandwidth',
-          backgroundColor: ["#139cb4", "#68dbf3", "#0d6caf", "#2c98e4"],
-            borderColor : 'white'
+          data: {{ dataUser|safe }},
+          label: 'Users Conected',
+          backgroundColor : '#3d95ef',
+          borderColor: '#3d95ef'
         }],
-        labels: {{ labelUpload|safe }}
+        labels: {{ labelsUser|safe }}
       },
-            options: {
-                responsive: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                stacked: false,
-            }
+      options: {
+        responsive: true
+      }
     };
 
     var configDevices = {
@@ -291,10 +276,12 @@
 
     window.onload = function() {
     var ctl = document.getElementById('line_Graph')
+    var usl = document.getElementById('usersConnected')
     var ctdevices = document.getElementById('devicesTypes')
     var ctm = document.getElementById('usersMonth')
     var ctw = document.getElementById('usersWeek')
     window.linechart = new Chart(ctl, configLine);
+    window.linechart = new Chart(usl, configUser);
     window.devicesChart = new Chart(ctdevices, configDevices);
     window.monthChart = new Chart(ctm, configMonth);
     window.weekChart = new Chart(ctw, configWeek);

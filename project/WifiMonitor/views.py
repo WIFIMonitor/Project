@@ -151,18 +151,21 @@ def overview(request):
     download, upload = bandwidthUsage(labels)
 
     try:
-        people_count = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
-        residentials_people_count = client.query("select sum(\"clientsCount\") from clientsCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
+        people_count = client.query("select sum(\"users\") from usersCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
+        residentials_people_count = client.query("select sum(\"users\") from usersCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
         campus_people_count = people_count - residentials_people_count
+        total_devices = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
     except:
         people_count = "null"
         residentials_people_count = "null"
         campus_people_count = "null"
+        total_devices = "null"
 
     tparams = {
-        'people_count' : people_count,
-        'residentials_people_count': residentials_people_count,
-        'campus_people_count': campus_people_count,
+        'people_count' : int(people_count),
+        'residentials_people_count': int(residentials_people_count),
+        'campus_people_count': int(campus_people_count),
+        'total_devices' : int(total_devices),
         'time': timestamp,
         'labels': labels,
         'data1': data1,
@@ -196,20 +199,16 @@ def specific_building(request, building=None):
     dataMonth = []
     dataDist=[]
     labelsDist=[]
-    labelDownload = []
-    labelUpload = []
-    dataDownload = []
-    dataUpload = []
     labelsWeek = []
     dataWeek = []
+    dataUser=[]
+    labelsUser=[]
 
     if(request.method=='POST'):
         if specific_build_form.is_valid():
             building = specific_build_form.cleaned_data.get('departs')
             if building != None:
-                dataDist,labelsDist = line_graph(building)
-                labelDownload,dataDownload = downloadChart()
-                labelUpload,dataUpload = uploadChart()
+                dataDist,labelsDist,dataUser,labelsUser = line_graph(building)
                 devices, devicesData = devicesTypes(str(building).lower())
                 labelsMonth, dataMonth = usersMonth(str(building).lower())
                 labelsWeek, dataWeek = usersWeek(str(building).lower())
@@ -222,10 +221,8 @@ def specific_building(request, building=None):
         'specific_building_form': specific_build_form,
         'dataDist': dataDist,
         'labelsDist' : labelsDist,
-        'labelDownload' : labelDownload,
-        'dataDownload' : dataDownload,
-        'labelUpload' : labelUpload,
-        'dataUpload': dataUpload,
+        'dataUser': dataUser,
+        'labelsUser' : labelsUser,
         'devices': devices,
         'dataDevices': devicesData,
         'labelsMonth': labelsMonth,
@@ -240,14 +237,21 @@ def line_graph(building = None):
     building = str(building).lower()
     if(building != None):
         values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+        users = client.query("select mean(\"sum\")from (select sum(\"users\") from usersCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
     labels = []
     data = []
+    labels_users = []
+    data_users = []
 
     for sample in values:
         labels.append(sample[0][sample[0].find('T')+1: -4])
         data.append(sample[1])
 
-    return data,labels
+    for sample in users:
+        labels_users.append(sample[0][sample[0].find('T')+1: -4])
+        data_users.append(sample[1])
+
+    return data,labels,data_users,labels_users
 
 def users_per_month(timetaken):
     labels=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November", "December"]
@@ -289,24 +293,6 @@ def users_per_week(timetaken):
             data.append(0)
 
     return lst,data
-
-def downloadChart():
-    aps = []
-    data = []
-    for i in range(1,11):
-        aps.append("AP-"+str(i))
-        data.append(random.randint(5000))
-
-    return aps,data
-
-def uploadChart():
-    aps = []
-    data = []
-    for i in range(1, 11):
-        aps.append("AP-" + str(i))
-        data.append(random.randint(5000))
-
-    return aps,data
 
 def frequencyUsage():
     count2_4 = get_building_24_ghz()
