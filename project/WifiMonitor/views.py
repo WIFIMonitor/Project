@@ -151,15 +151,15 @@ def overview(request):
     download, upload = bandwidthUsage(labels)
 
     try:
-        people_count = client.query("select sum(\"users\") from usersCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
-        residentials_people_count = client.query("select sum(\"users\") from usersCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-15m").raw['series'][0]["values"][0][1]
+        people_count = client.query("select sum(\"users\") from usersCount where time >=\'"+latestTS+"\'-30m ").raw['series'][0]["values"][0][1]
+        residentials_people_count = client.query("select sum(\"users\") from usersCount where \"building\"= \'ra\' and time >=\'"+latestTS+"\'-30m").raw['series'][0]["values"][0][1]
         campus_people_count = people_count - residentials_people_count
         total_devices = client.query("select sum(clientsCount) from clientsCount where time >=\'"+latestTS+"\'-15m ").raw['series'][0]["values"][0][1]
     except:
-        people_count = "null"
-        residentials_people_count = "null"
-        campus_people_count = "null"
-        total_devices = "null"
+        people_count = 0
+        residentials_people_count = 0
+        campus_people_count = 0
+        total_devices = 0
 
     tparams = {
         'people_count' : int(people_count),
