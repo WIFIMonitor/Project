@@ -10,7 +10,7 @@ from numpy import random, signbit
 import timeit
 import time
 
-client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("XXX.XXX.XXX.XXX", XXXX, "XXXX", "XXXXXXXXX", "XXXXXXXXXX")
 global prev_id
 prev_id = 0
 
