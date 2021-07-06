@@ -17,6 +17,7 @@ prev_id = 0
 def get_last_ts():
     # get the last timestamp value of the database
     return client.query("select last(clientsCount) from clientsCount").raw['series'][0]['values'][0][0]
+    #return "2021-06-02T22:28:28.157180Z"
 
 # Get the date of the measures being displayed
 timestamp = "from day: "+get_last_ts().replace("T"," at ")[:-8]
@@ -222,11 +223,17 @@ def specific_building(request, building=None):
 def line_graph(building = None):
     latestTS = get_last_ts()
     building = str(building).lower()
+    values = []
+    users=[]
     if(building != None):
-        values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
-        users = client.query("select mean(\"sum\")from (select sum(\"users\") from usersCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
-        print(values)
-        print(users)
+        try:
+            values = client.query("select mean(\"sum\")from (select sum(\"clientsCount\") from clientsCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+        except:
+            print("ERROR:  no recent information about clientsCount")
+        try:
+            users = client.query("select mean(\"sum\")from (select sum(\"users\") from usersCount where \"building\" = \'"+building +"\' and time >=\'"+latestTS+"\'-24h GROUP BY time(15m)) group by time(1h)").raw['series'][0]["values"]
+        except:
+            print("ERROR:  no recent information about userCount")
     labels = []
     data = []
     labels_users = []
@@ -299,9 +306,10 @@ def frequencyUsage():
     return data2_4, data5
 
 def bandwidthUsage(labels):
+    latestTS = get_last_ts()
     values=[]
     try:
-        values = client.query("select * from metricsBuildingCount where time>now()-1h").raw['series'][0]["values"]
+        values = client.query("select * from metricsBuildingCount where time>\'"+latestTS+"\'-1h").raw['series'][0]["values"]
     except:
         print("ERROR: no recent information about bandwith usage")
     
@@ -337,7 +345,6 @@ def devicesTypes(building):
     values=[]
     try:
         values = client.query("select \"ap_name\",\"android\",\"ios\",\"laptop\" from devicesTypes where time >= \'"+latestTS+"\'-1h and \"building\" = \'" + building + "\'").raw['series'][0]["values"]
-        print(values) 
     except:
         print("ERROR: building doesn't provide information about devices types")
 
