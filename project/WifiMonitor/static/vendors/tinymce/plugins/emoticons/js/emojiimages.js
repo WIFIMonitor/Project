@@ -3865,7 +3865,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     fitzpatrick_scale: false,
     category: "activity"
   },
-  b***REMOVED***ton: {
+  badminton: {
     keywords: [ "sports" ],
     "char": '<img data-emoticon="true" style="width:1em;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em" draggable="false" alt="\ud83c\udff8" src="1f3f8.png"/>',
     fitzpatrick_scale: false,
